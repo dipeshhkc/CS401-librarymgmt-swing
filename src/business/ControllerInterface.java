@@ -9,6 +9,7 @@ import dataaccess.DataAccessFacade;
 public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
 	public List<String> allMemberIds();
+	public void addMember(LibraryMember mem);
 	public List<String> allBookIds();
 	
 }
