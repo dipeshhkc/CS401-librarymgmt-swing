@@ -18,11 +18,9 @@ import business.LibraryMember;
 import business.SystemController;
 import librarysystem.LibrarySystem;
 
-public class AddNewMemberPanel {
-
-	private AddNewMemberPanel() {
-	}
-
+public class AddNewBookPanel {
+	
+	private AddNewBookPanel() {}
 	private static JPanel panel;
 	private static JTextField id;
 	private static JTextField firstName;
@@ -32,13 +30,14 @@ public class AddNewMemberPanel {
 	private static JTextField state;
 	private static JTextField zip;
 	private static JTextField cell;
-
+	
 	private static ControllerInterface ci = new SystemController();
 
-	public static Component getNewMemberPanel(JFrame frame) {
-		return getPanel(frame);
-	}
 
+	public static Component getNewMemberPanel(JFrame frame) {
+			return getPanel(frame);
+	}
+	
 	private static JPanel getPanel(JFrame frame) {
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
@@ -139,26 +138,14 @@ public class AddNewMemberPanel {
 
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(e -> {
-			String fN = firstName.getText();
-			String lN = lastName.getText();
-			String zipCode = zip.getText();
-			String phone = cell.getText();
-			if (id.getText().equals("") || fN.equals("") || lN.equals("") || street.getText().equals("")
-					|| city.getText().equals("") || state.getText().equals("") || zipCode.equals("")
-					|| cell.getText().equals("")) {
+			if (id.getText().equals("") || firstName.getText().equals("") || lastName.getText().equals("")
+					|| street.getText().equals("") || city.getText().equals("") || state.getText().equals("")
+					|| zip.getText().equals("") || cell.getText().equals("")) {
 				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
-			} else if (!fN.matches("[a-zA-Z]*") || !lN.matches("[a-zA-Z]*")) {
-				JOptionPane.showMessageDialog(frame, "Names cannot have numbers");
-			} else if (!zipCode.matches("\\d{5}")) {
-				JOptionPane.showMessageDialog(frame, "Zip Code should be of 5 digits.");
-			} else if (!phone.matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")) {
-				JOptionPane.showMessageDialog(frame, "Phone Number is invalid");
 			} else {
 				Address address = new Address(street.getText(), city.getText(), state.getText(), zip.getText());
-				LibraryMember member = new LibraryMember(id.getText(), firstName.getText(), lastName.getText(),
-						cell.getText(), address);
+				LibraryMember member = new LibraryMember(id.getText(),firstName.getText(), lastName.getText(), cell.getText(),address);
 				ci.addMember(member);
-				clearInputField();
 				JOptionPane.showMessageDialog(frame, "Successful Addition of new Member");
 			}
 
@@ -182,16 +169,6 @@ public class AddNewMemberPanel {
 
 	}
 
-	private static void clearInputField() {
 
-		firstName.setText("");
-		lastName.setText("");
-		street.setText("");
-		city.setText("");
-		state.setText("");
-		zip.setText("");
-		cell.setText("");
-
-	}
 
 }
