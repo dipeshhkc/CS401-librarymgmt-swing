@@ -3,29 +3,18 @@ package librarysystem;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.SwingConstants;
-
-import business.LoginException;
-import business.SystemController;
 import dataaccess.Auth;
-import dataaccess.User;
 
 public class PortalWindow extends JFrame implements LibWindow {
 
@@ -42,7 +31,8 @@ public class PortalWindow extends JFrame implements LibWindow {
 	
 	private boolean[] enabledFlags;
 	
-	public static String[] funcItems = {	
+	public static String[] funcItems = {
+			"Home", 
 			"Member", 
 			"   Create new members",
 			"   Edit member",
@@ -50,14 +40,15 @@ public class PortalWindow extends JFrame implements LibWindow {
 			"   Add new books",
 			"   Add new copies", 
 			"   Check out"};
-	
-	private static int FUNC_MEMBER = 0;
-	private static int FUNC_CREATE_NEW_MEM = 1;
-	private static int FUNC_EDIT_MEM = 2;
-	private static int FUNC_BOOK = 3;
-	private static int FUNC_ADD_NEW_BOOK = 4;
-	private static int FUNC_ADD_NEW_COPY = 5;
-	private static int FUNC_CHECKOUT = 6;
+
+	private static int FUNC_HOME = 0;
+	private static int FUNC_MEMBER = 1;
+	private static int FUNC_CREATE_NEW_MEM = 2;
+	private static int FUNC_EDIT_MEM = 3;
+	private static int FUNC_BOOK = 4;
+	private static int FUNC_ADD_NEW_BOOK = 5;
+	private static int FUNC_ADD_NEW_COPY = 6;
+	private static int FUNC_CHECKOUT = 7;
 	
 	public static final PortalWindow INSTANCE = new PortalWindow();
 	
@@ -86,6 +77,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		for(int i = 0; i < enabledFlags.length; i++)
 			enabledFlags[i] = false;
 		
+		enabledFlags[FUNC_HOME] = true;
 		if(au == Auth.ADMIN || au == Auth.BOTH) {
 			enabledFlags[FUNC_MEMBER] = true;
 			enabledFlags[FUNC_CREATE_NEW_MEM] = true;
@@ -99,6 +91,8 @@ public class PortalWindow extends JFrame implements LibWindow {
 			enabledFlags[FUNC_BOOK] = true;
 			enabledFlags[FUNC_CHECKOUT] = true;
 		}
+		
+		funcList.setSelectedIndex(FUNC_HOME);
 	}
 	
 	private void init(String name, Auth au) {  
@@ -171,6 +165,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	    
         cards = new JPanel(new CardLayout());
 
+        cards.add(new JPanel(), funcItems[FUNC_HOME]);
 		cards.add(middleP0, funcItems[FUNC_CREATE_NEW_MEM]);
 		cards.add(middleP1, funcItems[FUNC_EDIT_MEM]);
 		cards.add(middleP2, funcItems[FUNC_ADD_NEW_BOOK]);
