@@ -138,6 +138,17 @@ public class AddNewMemberPanel {
 
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(e -> {
+			if (id.getText().equals("") || firstName.getText().equals("") || lastName.getText().equals("")
+					|| street.getText().equals("") || city.getText().equals("") || state.getText().equals("")
+					|| zip.getText().equals("") || cell.getText().equals("")) {
+				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
+			} else {
+				Address address = new Address(street.getText(), city.getText(), state.getText(), zip.getText());
+				LibraryMember member = new LibraryMember(id.getText(),firstName.getText(), lastName.getText(), cell.getText(),address);
+				ci.addMember(member);
+				JOptionPane.showMessageDialog(frame, "Successful Addition of new Member");
+			}
+
 		});
 		btnAdd.setForeground(Color.WHITE);
 		btnAdd.setBackground(SystemColor.desktop);
