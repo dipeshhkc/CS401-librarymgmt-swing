@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import business.Address;
 import business.ControllerInterface;
 import business.LibraryMember;
+import business.LibrarySystemException;
 import business.SystemController;
 import librarysystem.LibrarySystem;
 
@@ -157,7 +158,12 @@ public class AddNewMemberPanel {
 				Address address = new Address(street.getText(), city.getText(), state.getText(), zip.getText());
 				LibraryMember member = new LibraryMember(id.getText(), firstName.getText(), lastName.getText(),
 						cell.getText(), address);
-				ci.addMember(member);
+				try {
+					ci.addMember(member);
+				} catch (LibrarySystemException err) {
+					JOptionPane.showMessageDialog(frame, err.getMessage());
+					return;
+				}
 				clearInputField();
 				JOptionPane.showMessageDialog(frame, "Successful Addition of new Member");
 			}
@@ -183,7 +189,7 @@ public class AddNewMemberPanel {
 	}
 
 	private static void clearInputField() {
-
+		id.setText("");	
 		firstName.setText("");
 		lastName.setText("");
 		street.setText("");
