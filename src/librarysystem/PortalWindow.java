@@ -26,6 +26,7 @@ import business.LoginException;
 import business.SystemController;
 import dataaccess.Auth;
 import dataaccess.User;
+import librarysystem.Panel.AddNewMemberPanel;
 
 public class PortalWindow extends JFrame implements LibWindow {
 
@@ -121,7 +122,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		splitPane.setDividerLocation(150);
 		add(splitPane, BorderLayout.CENTER);
 		
-		setSize(660,500);
+		setSize(1100,800);
 		setUser(username, au);
 		isInitialized = true;
 	 
@@ -171,7 +172,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	    
         cards = new JPanel(new CardLayout());
 
-		cards.add(middleP0, funcItems[FUNC_CREATE_NEW_MEM]);
+		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
 		cards.add(middleP1, funcItems[FUNC_EDIT_MEM]);
 		cards.add(middleP2, funcItems[FUNC_ADD_NEW_BOOK]);
 		cards.add(middleP3, funcItems[FUNC_ADD_NEW_COPY]);
