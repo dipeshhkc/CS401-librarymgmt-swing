@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -17,11 +20,13 @@ import javax.swing.SwingConstants;
 import javax.swing.JOptionPane;
 
 import business.ControllerInterface;
-
+import business.LoginException;
 import business.SystemController;
 
 
 public class LoginWindow extends JFrame implements LibWindow {
+	private static final long serialVersionUID = -4332346753166095308L;
+	ControllerInterface ci = new SystemController();
     public static final LoginWindow INSTANCE = new LoginWindow();
 	
 	private boolean isInitialized = false;
@@ -186,11 +191,28 @@ public class LoginWindow extends JFrame implements LibWindow {
     	
     	private void addLoginButtonListener(JButton butn) {
     		butn.addActionListener(evt -> {
-    			JOptionPane.showMessageDialog(this,"Successful Login");
-    				
+    			
+    			try {
+					ci.login(username.getText(), password.getText());
+				} catch (LoginException e) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(this,e.getMessage());
+					//e.printStackTrace();
+					return;
+				}
+    			
+    			LibrarySystem.hideAllWindows();
+    			PortalWindow.INSTANCE.setUser(username.getText(), SystemController.currentAuth);  			
+    			Util.centerFrameOnDesktop(PortalWindow.INSTANCE);
+    			PortalWindow.INSTANCE.setVisible(true);
     		});
     	}
 	
+    	
+    	public void reset() {
+    		username.setText("");
+    		password.setText("");
+    	}
         
     
 }

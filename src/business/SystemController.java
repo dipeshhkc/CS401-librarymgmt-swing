@@ -13,6 +13,11 @@ public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
 	
 	public void login(String id, String password) throws LoginException {
+		if(id.isBlank())
+			throw new LoginException("ID is empty");
+		if(password.isBlank())
+			throw new LoginException("Password is empty");
+		
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, User> map = da.readUserMap();
 		if(!map.containsKey(id)) {
