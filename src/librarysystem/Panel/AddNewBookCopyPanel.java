@@ -83,8 +83,10 @@ public class AddNewBookCopyPanel extends JFrame  implements LibWindow{
 		JButton btnAddCopy = new JButton("Add Copy");
 		btnAddCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ci.addNewBookCopy(txtISBN.getText());
 				
-				
+				int iNum = ci.getBookCopiesCount(txtISBN.getText());
+				txtCopies.setText("" + iNum);
 			}
 		});
 		
