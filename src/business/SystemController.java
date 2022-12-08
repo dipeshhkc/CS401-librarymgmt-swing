@@ -46,6 +46,14 @@ public class SystemController implements ControllerInterface {
 		return book.getNextAvailableCopy();
 	}
 
+	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
+		boolean loginExists;
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, User> map = da.readUserMap();
+		loginExists = map.containsKey(libraryMemberId) ? true : false;
+		return loginExists;
+	}
+
 	public void addNewBookCopy(String isbn) {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, Book> bookMap = da.readBooksMap();
@@ -84,16 +92,6 @@ public class SystemController implements ControllerInterface {
 		if (checkoutBookList.size() > 0) {
 			da.saveCheckoutRecord(libMember.getMemberId(), checkoutBookList);
 		}
-	}
-
-	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
-		boolean loginExists = true;
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, User> map = da.readUserMap();
-		if (!map.containsKey(libraryMemberId)) {
-			throw new LoginException("ID " + libraryMemberId + " not found");
-		}
-		return loginExists;
 	}
 
 	@Override
