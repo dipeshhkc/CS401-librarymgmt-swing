@@ -45,6 +45,17 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, mems);
 	}
 
+	public void addBook(Book b) throws LibrarySystemException {
+		HashMap<String, Book> books = readBooksMap();
+		String bookID = b.getIsbn();
+		// Book with this ISBN already present.
+		if (books.containsKey(bookID)) {
+			throw new LibrarySystemException("Book with this ISBN already Present.");
+		}
+		books.put(bookID, b);
+		saveToStorage(StorageType.BOOKS, books);
+	}
+	
 	public void saveBookCopies(BookCopy bc) {
 		boolean ISBNFound = false;
 		HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = readBookCopies();
