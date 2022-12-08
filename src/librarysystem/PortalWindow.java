@@ -16,6 +16,7 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import dataaccess.Auth;
+import librarysystem.Panel.AddNewBookPanel;
 import librarysystem.Panel.AddNewMemberPanel;
 
 public class PortalWindow extends JFrame implements LibWindow {
@@ -141,9 +142,6 @@ public class PortalWindow extends JFrame implements LibWindow {
 		JLabel l1 = new JLabel(funcItems[FUNC_EDIT_MEM]);
 		middleP1.add(l1);
 
-		JPanel middleP2 = new JPanel();
-		JLabel l2 = new JLabel(funcItems[FUNC_ADD_NEW_BOOK]);
-		middleP2.add(l2);
 
 		JPanel middleP3 = new JPanel();
 		JLabel l3 = new JLabel(funcItems[FUNC_ADD_NEW_COPY]);
@@ -160,7 +158,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		cards.add(new JPanel(), funcItems[FUNC_HOME]);
 		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
 		cards.add(middleP1, funcItems[FUNC_EDIT_MEM]);
-		cards.add(middleP2, funcItems[FUNC_ADD_NEW_BOOK]);
+		cards.add(AddNewBookPanel.getNewBookPanel(this), funcItems[FUNC_ADD_NEW_BOOK]);
 		cards.add(middleP3, funcItems[FUNC_ADD_NEW_COPY]);
 		cards.add(middleP4, funcItems[FUNC_CHECKOUT]);
 
