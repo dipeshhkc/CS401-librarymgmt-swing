@@ -13,4 +13,5 @@ public interface ControllerInterface {
 	
 	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) throws Exception;
 
+	public int getBookCopiesCount(String isbn);
 }

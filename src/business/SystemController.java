@@ -43,6 +43,7 @@ public class SystemController implements ControllerInterface {
 		Book book = bookMap.get(isbn);
 		if (!book.isAvailable())
 			throw new Exception("Requested book with ISBN " + isbn + " is not available");
+		BookCopy bCopy = book.getNextAvailableCopy();
 		return book.getNextAvailableCopy();
 	}
 
@@ -60,8 +61,14 @@ public class SystemController implements ControllerInterface {
 		HashMap<String, Book> bookMap = da.readBooksMap();
 		Book b = bookMap.get(isbn);
 		b.addCopy();
-		da.updateBook(b);
-
+		da.updateBook(b);	
+	}
+	
+	public int getBookCopiesCount(String isbn) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, Book> bookMap = da.readBooksMap();
+		Book book = bookMap.get(isbn);
+		return book.getCopies().length;
 	}
 
 	public List<BookCopy> addBookCopyForCheckout(BookCopy bc, List<BookCopy> bookCopyCheckoutList) {
