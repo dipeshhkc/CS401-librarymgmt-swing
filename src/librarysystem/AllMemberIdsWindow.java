@@ -3,6 +3,7 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.TextArea;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -27,7 +28,9 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 	private JPanel lowerPanel;
 	private TextArea textArea;
 	
-	private AllMemberIdsWindow() {}
+	private AllMemberIdsWindow() {
+		init();
+	}
 	
 	public void init() {
 		mainPanel = new JPanel();
@@ -37,9 +40,11 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		defineLowerPanel();
 		mainPanel.add(topPanel, BorderLayout.NORTH);
 		mainPanel.add(middlePanel, BorderLayout.CENTER);	
-		mainPanel.add(lowerPanel, BorderLayout.SOUTH);
+		//mainPanel.add(lowerPanel, BorderLayout.SOUTH);
 		getContentPane().add(mainPanel);
 		isInitialized = true;
+		
+		setData();
 	}
 	
 	public void defineTopPanel() {
@@ -68,9 +73,21 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		lowerPanel.add(backButton);
 	}
 	
+	public void setData() {
+		List<String> ids = ci.allMemberIds();
+		Collections.sort(ids);
+		StringBuilder sb = new StringBuilder();
+		for (String s : ids) {
+			sb.append(s + "\n");
+		}
+		System.out.println(sb.toString());
+		setData(sb.toString());
+	}
+	
 	public void setData(String data) {
 		textArea.setText(data);
 	}
+	
 	private void addBackButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 		   LibrarySystem.hideAllWindows();

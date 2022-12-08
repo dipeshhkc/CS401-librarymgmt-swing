@@ -33,17 +33,30 @@ public class PortalWindow extends JFrame implements LibWindow {
 
 	private boolean[] enabledFlags;
 
-	public static String[] funcItems = { "Home", "Member", "   Create new members", "   Edit member", "Book",
-			"   Add new books", "   Add new copies", "   Check out" };
+	public static String[] funcItems = { 
+			"Home", 
+			"Member", 
+			"   Add new members", 
+			"   Search member",
+			"   All memberIds",
+			"Book",
+			"   Add new books", 
+			"   Add new copies",
+			"   Check status of book copy",
+			"   All bookIds",
+			"   Check out" };
 
 	private static int FUNC_HOME = 0;
 	private static int FUNC_MEMBER = 1;
 	private static int FUNC_CREATE_NEW_MEM = 2;
-	private static int FUNC_EDIT_MEM = 3;
-	private static int FUNC_BOOK = 4;
-	private static int FUNC_ADD_NEW_BOOK = 5;
-	private static int FUNC_ADD_NEW_COPY = 6;
-	private static int FUNC_CHECKOUT = 7;
+	private static int FUNC_SEARCH_MEM = 3;
+	private static int FUNC_ALL_MEM = 4;
+	private static int FUNC_BOOK = 5;
+	private static int FUNC_ADD_NEW_BOOK = 6;
+	private static int FUNC_ADD_NEW_COPY  = 7;
+	private static int FUNC_CHECK_STATUS = 8;
+	private static int FUNC_ALL_BOOK = 9;
+	private static int FUNC_CHECKOUT = 10;
 
 	public static final PortalWindow INSTANCE = new PortalWindow();
 
@@ -75,12 +88,13 @@ public class PortalWindow extends JFrame implements LibWindow {
 			enabledFlags[i] = false;
 
 		enabledFlags[FUNC_HOME] = true;
-		if (au == Auth.ADMIN || au == Auth.BOTH) {
-			enabledFlags[FUNC_MEMBER] = true;
+		enabledFlags[FUNC_MEMBER] = true;
+		enabledFlags[FUNC_ALL_MEM] = true;
+		enabledFlags[FUNC_BOOK] = true;
+		enabledFlags[FUNC_ALL_BOOK] = true;
+		if (au == Auth.ADMIN || au == Auth.BOTH) {		
 			enabledFlags[FUNC_CREATE_NEW_MEM] = true;
-			enabledFlags[FUNC_EDIT_MEM] = true;
-
-			enabledFlags[FUNC_BOOK] = true;
+			
 			enabledFlags[FUNC_ADD_NEW_BOOK] = true;
 			enabledFlags[FUNC_ADD_NEW_COPY] = true;
 		}
@@ -109,7 +123,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 
 		// [middle] create split
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, funcList, cards);
-		splitPane.setDividerLocation(150);
+		splitPane.setDividerLocation(180);
 		add(splitPane, BorderLayout.CENTER);
 
 		setSize(1100, 800);
@@ -137,10 +151,6 @@ public class PortalWindow extends JFrame implements LibWindow {
 		// add more functional Panel
 		// -----------------------------------
 		
-		JPanel middleP1 = new JPanel();
-		JLabel l1 = new JLabel(funcItems[FUNC_EDIT_MEM]);
-		middleP1.add(l1);
-
 		JPanel middleP2 = new JPanel();
 		JLabel l2 = new JLabel(funcItems[FUNC_ADD_NEW_BOOK]);
 		middleP2.add(l2);
@@ -159,14 +169,21 @@ public class PortalWindow extends JFrame implements LibWindow {
 		cards = new JPanel(new CardLayout());
 		cards.add(new JPanel(), funcItems[FUNC_HOME]);
 		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
-		cards.add(middleP1, funcItems[FUNC_EDIT_MEM]);
 		cards.add(middleP2, funcItems[FUNC_ADD_NEW_BOOK]);
 		cards.add(middleP3, funcItems[FUNC_ADD_NEW_COPY]);
 		cards.add(middleP4, funcItems[FUNC_CHECKOUT]);
+		cards.add(AllMemberIdsWindow.INSTANCE.getMainPanel(), funcItems[FUNC_ALL_MEM]);
+		cards.add(AllBookIdsWindow.INSTANCE.getMainPanel(), funcItems[FUNC_ALL_BOOK]);
 
 		// connect JList elements to CardLayout panels
 		funcList.addListSelectionListener(event -> {
 			String value = funcList.getSelectedValue().toString();
+			
+			if(value.compareTo(funcItems[FUNC_ALL_MEM]) == 0)
+				AllMemberIdsWindow.INSTANCE.setData();
+			else if(value.compareTo(funcItems[FUNC_ALL_BOOK]) == 0)
+				AllBookIdsWindow.INSTANCE.setData();
+				
 			CardLayout cl = (CardLayout) (cards.getLayout());
 			cl.show(cards, value);
 		});
@@ -176,7 +193,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		butn.addActionListener(evt -> {
 			LibrarySystem.hideAllWindows();
 			LoginWindow.INSTANCE.reset();
-			LoginWindow.INSTANCE.setVisible(true);
+			LibrarySystem.INSTANCE.setVisible(true);
 
 		});
 	}

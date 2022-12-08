@@ -50,7 +50,9 @@ public class LoginWindow extends JFrame implements LibWindow {
 	private JButton logoutButton;
 	
 	
-	
+	public JPanel getMainPanel() {
+		return mainPanel;
+	}
 	
 	public boolean isInitialized() {
 		return isInitialized;
@@ -64,7 +66,9 @@ public class LoginWindow extends JFrame implements LibWindow {
 	}
 	
 	/* This class is a singleton */
-    private LoginWindow () {}
+    private LoginWindow () {
+    	init();
+    }
     
     public void init() {     		
     		mainPanel = new JPanel();
@@ -77,7 +81,7 @@ public class LoginWindow extends JFrame implements LibWindow {
     					
     		mainPanel.add(upperHalf, BorderLayout.NORTH);
     		mainPanel.add(middleHalf, BorderLayout.CENTER);
-    		mainPanel.add(lowerHalf, BorderLayout.SOUTH);
+    		//mainPanel.add(lowerHalf, BorderLayout.SOUTH);
     		getContentPane().add(mainPanel);
     		isInitialized(true);
     		pack();

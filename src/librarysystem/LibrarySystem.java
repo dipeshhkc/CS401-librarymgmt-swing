@@ -47,18 +47,20 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	@Override
 	public void init() {
 		formatContentPane();
-		setPathToImage();
-		insertSplashImage();
+		//setPathToImage();
+		//insertSplashImage();
 
-		createMenus();
-		// pack();
-		setSize(660, 500);
+		//createMenus();
+		 pack();
+		//setSize(660, 500);
 		isInitialized = true;
 	}
 
 	private void formatContentPane() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(1, 1));
+		mainPanel.add(LoginWindow.INSTANCE.getMainPanel());
+		    
 		getContentPane().add(mainPanel);
 	}
 
@@ -72,6 +74,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		mainPanel.add(new JLabel(image));
 	}
 
+	/*
 	private void createMenus() {
 		menuBar = new JMenuBar();
 		menuBar.setBorder(BorderFactory.createRaisedBevelBorder());
@@ -157,7 +160,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 		}
 
-	}
+	}*/
 
 	@Override
 	public boolean isInitialized() {
