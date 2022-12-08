@@ -1,5 +1,10 @@
 package librarysystem;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
@@ -10,41 +15,26 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import dataaccess.Auth;
-<<<<<<< HEAD
-import dataaccess.User;
 import librarysystem.Panel.AddNewMemberPanel;
-=======
->>>>>>> 7addf5f4c28cee1351cecaee134fcc96bda44fef
 
 public class PortalWindow extends JFrame implements LibWindow {
 
 	private static final long serialVersionUID = 3842471112999905561L;
-	
+
 	private boolean isInitialized = false;
 	private String username = "";
 	private Auth auth = Auth.BOTH;
-	
+
 	private JLabel lblWecome;
 	private JButton btnLogout;
 	JList<String> funcList;
 	JPanel cards;
-	
+
 	private boolean[] enabledFlags;
-	
-	public static String[] funcItems = {
-			"Home", 
-			"Member", 
-			"   Create new members",
-			"   Edit member",
-			"Book",
-			"   Add new books",
-			"   Add new copies", 
-			"   Check out"};
+
+	public static String[] funcItems = { "Home", "Member", "   Create new members", "   Edit member", "Book",
+			"   Add new books", "   Add new copies", "   Check out" };
 
 	private static int FUNC_HOME = 0;
 	private static int FUNC_MEMBER = 1;
@@ -54,40 +44,42 @@ public class PortalWindow extends JFrame implements LibWindow {
 	private static int FUNC_ADD_NEW_BOOK = 5;
 	private static int FUNC_ADD_NEW_COPY = 6;
 	private static int FUNC_CHECKOUT = 7;
-	
+
 	public static final PortalWindow INSTANCE = new PortalWindow();
-	
+
 	public PortalWindow() {
 		init(username, auth);
 	}
-	
+
 	@Override
 	public boolean isInitialized() {
 		return isInitialized;
 	}
+
 	@Override
 	public void isInitialized(boolean val) {
 		isInitialized = val;
 	}
+
 	@Override
 	public void init() {
-		
+
 	}
-		
+
 	public void setUser(String name, Auth au) {
 		username = name;
 		auth = au;
 		lblWecome.setText("Welcome " + username);
-		
-		for(int i = 0; i < enabledFlags.length; i++)
+
+		for (int i = 0; i < enabledFlags.length; i++)
 			enabledFlags[i] = false;
-		
+
 		enabledFlags[FUNC_HOME] = true;
-		if(au == Auth.ADMIN || au == Auth.BOTH) {
+		if (au == Auth.ADMIN || au == Auth.BOTH) {
 			enabledFlags[FUNC_MEMBER] = true;
 			enabledFlags[FUNC_CREATE_NEW_MEM] = true;
 			enabledFlags[FUNC_EDIT_MEM] = true;
-			
+
 			enabledFlags[FUNC_BOOK] = true;
 			enabledFlags[FUNC_ADD_NEW_BOOK] = true;
 			enabledFlags[FUNC_ADD_NEW_COPY] = true;
@@ -96,186 +88,166 @@ public class PortalWindow extends JFrame implements LibWindow {
 			enabledFlags[FUNC_BOOK] = true;
 			enabledFlags[FUNC_CHECKOUT] = true;
 		}
-		
+
 		funcList.setSelectedIndex(FUNC_HOME);
 	}
-	
-	private void init(String name, Auth au) {  
+
+	private void init(String name, Auth au) {
 		username = name;
 		auth = au;
-		
+
 		enabledFlags = new boolean[funcItems.length];
-		
-		//[left] create List of functionalities		
-		funcList = new JList<String>(funcItems);	
+
+		// [left] create List of functionalities
+		funcList = new JList<String>(funcItems);
 		funcList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		funcList.setSelectionModel(new DisabledItemSelectionModel());
 		funcList.setCellRenderer(new DisabledItemListCellRenderer());
-	
-		//[right] create panels
+
+		// [right] create panels
 		createPanels();
-		
-		//[middle] create split
+
+		// [middle] create split
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, funcList, cards);
 		splitPane.setDividerLocation(150);
 		add(splitPane, BorderLayout.CENTER);
-		
-		setSize(1100,800);
+
+		setSize(1100, 800);
 		setUser(username, au);
 		isInitialized = true;
-	 
+
 	}
-	
+
 	private void createPanels() {
-		//-----top Panel
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,10));
-        
-        lblWecome = new JLabel("Welcome " + username);
+		// -----top Panel
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+
+		lblWecome = new JLabel("Welcome " + username);
 		topPanel.add(lblWecome);
-		
-        btnLogout = new JButton("Logout");
+
+		btnLogout = new JButton("Logout");
 		addLogoutButtonListener(btnLogout);
 		topPanel.add(btnLogout);
 		add(topPanel, BorderLayout.NORTH);
-		
-		//----middle Panel
-		
-		
-		//------------------------------------
-        // add more functional Panel
-        //-----------------------------------
-		 JPanel middleP0 = new JPanel();
-		 JLabel l0 = new JLabel(funcItems[FUNC_CREATE_NEW_MEM]);
-		 middleP0.add(l0);		 
-		 
-		 JPanel middleP1 = new JPanel();
-		 JLabel l1 = new JLabel(funcItems[FUNC_EDIT_MEM]);
-		 middleP1.add(l1);
-		
-		 JPanel middleP2 = new JPanel();
-		 JLabel l2 = new JLabel(funcItems[FUNC_ADD_NEW_BOOK]);
-		 middleP2.add(l2);		
-		 
-		 JPanel middleP3 = new JPanel();
-		 JLabel l3 = new JLabel(funcItems[FUNC_ADD_NEW_COPY]);
-		 middleP3.add(l3);	
-		 
-		 JPanel middleP4 = new JPanel();
-		 JLabel l4 = new JLabel(funcItems[FUNC_CHECKOUT]);
-		 middleP4.add(l4);	
-		
-		//------------------------
-		//getContentPane().add(mainPanel);
-	    
-        cards = new JPanel(new CardLayout());
 
-<<<<<<< HEAD
+		// ----middle Panel
+
+		// ------------------------------------
+		// add more functional Panel
+		// -----------------------------------
+		
+		JPanel middleP1 = new JPanel();
+		JLabel l1 = new JLabel(funcItems[FUNC_EDIT_MEM]);
+		middleP1.add(l1);
+
+		JPanel middleP2 = new JPanel();
+		JLabel l2 = new JLabel(funcItems[FUNC_ADD_NEW_BOOK]);
+		middleP2.add(l2);
+
+		JPanel middleP3 = new JPanel();
+		JLabel l3 = new JLabel(funcItems[FUNC_ADD_NEW_COPY]);
+		middleP3.add(l3);
+
+		JPanel middleP4 = new JPanel();
+		JLabel l4 = new JLabel(funcItems[FUNC_CHECKOUT]);
+		middleP4.add(l4);
+
+		// ------------------------
+		// getContentPane().add(mainPanel);
+
+		cards = new JPanel(new CardLayout());
+		cards.add(new JPanel(), funcItems[FUNC_HOME]);
 		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
-=======
-        cards.add(new JPanel(), funcItems[FUNC_HOME]);
-		cards.add(middleP0, funcItems[FUNC_CREATE_NEW_MEM]);
->>>>>>> 7addf5f4c28cee1351cecaee134fcc96bda44fef
 		cards.add(middleP1, funcItems[FUNC_EDIT_MEM]);
 		cards.add(middleP2, funcItems[FUNC_ADD_NEW_BOOK]);
 		cards.add(middleP3, funcItems[FUNC_ADD_NEW_COPY]);
 		cards.add(middleP4, funcItems[FUNC_CHECKOUT]);
-		
-		//connect JList elements to CardLayout panels
+
+		// connect JList elements to CardLayout panels
 		funcList.addListSelectionListener(event -> {
 			String value = funcList.getSelectedValue().toString();
 			CardLayout cl = (CardLayout) (cards.getLayout());
 			cl.show(cards, value);
 		});
 	}
-	
+
 	private void addLogoutButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			LibrarySystem.hideAllWindows();
 			LoginWindow.INSTANCE.reset();
 			LoginWindow.INSTANCE.setVisible(true);
-			
+
 		});
 	}
-	
-	//--------------------------------------------------------
-	/*private class DisabledItemListCellRenderer extends DefaultListCellRenderer {
 
-        private static final long serialVersionUID = 1L;
+	// --------------------------------------------------------
+	/*
+	 * private class DisabledItemListCellRenderer extends DefaultListCellRenderer {
+	 * 
+	 * private static final long serialVersionUID = 1L;
+	 * 
+	 * @Override public Component getListCellRendererComponent(JList list, Object
+	 * value, int index, boolean isSelected, boolean cellHasFocus) { Component comp
+	 * = super.getListCellRendererComponent(list, value, index, false, false);
+	 * //JComponent jc = (JComponent) comp; if (enabledFlags[index]) { if
+	 * (isSelected & cellHasFocus) { comp.setForeground(Color.black);
+	 * comp.setBackground(Color.red); } else { comp.setForeground(Color.blue); } if
+	 * (!isSelected) { if ((value.toString()).trim().equals("yellow")) {
+	 * comp.setForeground(Color.orange); comp.setBackground(Color.magenta); } }
+	 * return comp; } comp.setEnabled(false); return comp; } }
+	 */
 
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            Component comp = super.getListCellRendererComponent(list, value, index, false, false);
-            //JComponent jc = (JComponent) comp;
-            if (enabledFlags[index]) {
-                if (isSelected & cellHasFocus) {
-                    comp.setForeground(Color.black);
-                    comp.setBackground(Color.red);
-                } else {
-                    comp.setForeground(Color.blue);
-                }
-                if (!isSelected) {
-                    if ((value.toString()).trim().equals("yellow")) {
-                        comp.setForeground(Color.orange);
-                        comp.setBackground(Color.magenta);
-                    }
-                }
-                return comp;
-            }
-            comp.setEnabled(false);
-            return comp;
-        }
-    }*/
-	
 	private class DisabledItemListCellRenderer extends DefaultListCellRenderer {
 
-        private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1L;
 
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 
-            if (enabledFlags[index]) {
-            	return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-          
-            Component comp = super.getListCellRendererComponent(list, value, index, false, false);
-            comp.setEnabled(false);
-            return comp;
-        }
-    }
-	
-	 private class DisabledItemSelectionModel extends DefaultListSelectionModel {
+			if (enabledFlags[index]) {
+				return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			}
 
-	        private static final long serialVersionUID = 1L;
+			Component comp = super.getListCellRendererComponent(list, value, index, false, false);
+			comp.setEnabled(false);
+			return comp;
+		}
+	}
 
-	        @Override
-	        public void setSelectionInterval(int index0, int index1) {
-	            if (enabledFlags[index0]) {
-	                super.setSelectionInterval(index0, index0);
-	            } else {
-	                /*
-	                 * The previously selected index is before this one,
-	                 * so walk forward to find the next selectable item.
-	                 */
-	                if (getAnchorSelectionIndex() < index0) {
-	                    for (int i = index0; i < enabledFlags.length; i++) {
-	                        if (enabledFlags[i]) {
-	                            super.setSelectionInterval(i, i);
-	                            return;
-	                        }
-	                    }
-	                } /*
-	                 * Otherwise, walk backward to find the next selectable item.
-	                 */ else {
-	                    for (int i = index0; i >= 0; i--) {
-	                        if (enabledFlags[i]) {
-	                            super.setSelectionInterval(i, i);
-	                            return;
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	    }
-	
+	private class DisabledItemSelectionModel extends DefaultListSelectionModel {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void setSelectionInterval(int index0, int index1) {
+			if (enabledFlags[index0]) {
+				super.setSelectionInterval(index0, index0);
+			} else {
+				/*
+				 * The previously selected index is before this one, so walk forward to find the
+				 * next selectable item.
+				 */
+				if (getAnchorSelectionIndex() < index0) {
+					for (int i = index0; i < enabledFlags.length; i++) {
+						if (enabledFlags[i]) {
+							super.setSelectionInterval(i, i);
+							return;
+						}
+					}
+				} /*
+					 * Otherwise, walk backward to find the next selectable item.
+					 */ else {
+					for (int i = index0; i >= 0; i--) {
+						if (enabledFlags[i]) {
+							super.setSelectionInterval(i, i);
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+
 }
