@@ -3,6 +3,7 @@ package business;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import dataaccess.Auth;
 import dataaccess.DataAccess;
@@ -46,11 +47,22 @@ public class SystemController implements ControllerInterface {
 		return addToCheckout(book.getNextAvailableCopy(), libraryMemberId);
 	}
 
-	private BookCopy addToCheckout(BookCopy bCopy, String libraryMemberId) {
+	private BookCopy addToCheckout(BookCopy bCopy, String libraryMemberId) throws Exception {
 		CheckoutRecordEntry cre = new CheckoutRecordEntry(bCopy, libraryMemberId);
 		DataAccess da = new DataAccessFacade();
-		da.saveToCheckoutRecord(libraryMemberId, cre);
+		try {
+			da.saveToCheckoutRecord(libraryMemberId, cre);
+			HashMap<String, Book> bookMap = da.readBooksMap();
+			Book book = bCopy.getBook();
+			bCopy.changeAvailability();
+			book.updateCopies(bCopy);
+			bookMap.put(book.getIsbn(), book);
+			da.updateBook(book);
+		} catch (Exception e) {
+			throw new Exception("Checkout Error");
+		}
 		return bCopy;
+
 	}
 
 	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
@@ -61,9 +73,11 @@ public class SystemController implements ControllerInterface {
 		return loginExists;
 	}
 
-	public void addNewBookCopy(String isbn) {
+	public void addNewBookCopy(String isbn) throws Exception {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, Book> bookMap = da.readBooksMap();
+		if (!bookMap.containsKey(isbn))
+			throw new Exception("No book found, couldn't add new copy");
 		Book b = bookMap.get(isbn);
 		b.addCopy();
 		da.updateBook(b);

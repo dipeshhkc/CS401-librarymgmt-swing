@@ -70,10 +70,11 @@ public class DataAccessFacade implements DataAccess {
 
 	}
 
+	//TODO: need to remove this
 	@Override
 	public void saveCheckoutRecordEntry(CheckoutRecordEntry cre) {
 		HashMap<Integer, CheckoutRecordEntry> checkoutRecordEntryMap = readCheckoutRecordEntry();
-		Integer uCheckoutId = cre.getUid();
+		Integer uCheckoutId = 1;
 		checkoutRecordEntryMap.put(uCheckoutId, cre);
 		saveToStorage(StorageType.CHECKOUTRECORDENTRY, cre);
 	}
@@ -185,6 +186,12 @@ public class DataAccessFacade implements DataAccess {
 		HashMap<String, LibraryMember> members = new HashMap<String, LibraryMember>();
 		memberList.forEach(member -> members.put(member.getMemberId(), member));
 		saveToStorage(StorageType.MEMBERS, members);
+	}
+	
+	//TODO: need to remove this
+	public static void loadCheckout() {
+		HashMap<String, List<CheckoutRecordEntry> > chechoutListMap = new HashMap<>();
+		saveToStorage(StorageType.CHECKOUTRECORD, chechoutListMap);
 	}
 
 	static void saveToStorage(StorageType type, Object ob) {

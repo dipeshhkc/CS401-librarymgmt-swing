@@ -15,5 +15,5 @@ public interface ControllerInterface {
 
 	public int getBookCopiesCount(String isbn);
 	
-	public void addNewBookCopy(String isbn);
+	public void addNewBookCopy(String isbn) throws Exception;
 }
