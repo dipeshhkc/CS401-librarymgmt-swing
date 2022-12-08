@@ -97,7 +97,7 @@ public class SystemController implements ControllerInterface {
 				updateBookCopyObj.setAvailable(false);
 				da.updateBookCopy(bookCopyUID, updateBookCopyObj);
 
-				CheckoutRecordEntry cre = new CheckoutRecordEntry(updateBookCopyObj, libMember);
+				CheckoutRecordEntry cre = new CheckoutRecordEntry(updateBookCopyObj, libMember.getMemberId());
 				da.saveCheckoutRecordEntry(cre);
 				checkoutBookList.add(cre);
 			}

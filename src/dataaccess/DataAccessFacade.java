@@ -97,6 +97,7 @@ public class DataAccessFacade implements DataAccess {
 		if (bookListMap.containsKey(isbn)) {
 			bookListMap.put(isbn, b);
 		}
+		saveToStorage(StorageType.BOOKS, bookListMap);
 	}
 
 	@Override
