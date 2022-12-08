@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import business.ControllerInterface;
 import business.SystemController;
+import librarysystem.Panel.CheckoutPanel;
 
 public class LibrarySystem extends JFrame implements LibWindow {
 	/**
@@ -33,7 +34,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	private boolean isInitialized = false;
 
 	private static LibWindow[] allWindows = { LibrarySystem.INSTANCE, LoginWindow.INSTANCE, PortalWindow.INSTANCE,
-			AllMemberIdsWindow.INSTANCE, AllBookIdsWindow.INSTANCE };
+			AllMemberIdsWindow.INSTANCE, AllBookIdsWindow.INSTANCE,
+			CheckoutPanel.INSTANCE};
 
 	public static void hideAllWindows() {
 		for (LibWindow frame : allWindows) {

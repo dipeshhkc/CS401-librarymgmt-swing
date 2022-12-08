@@ -31,7 +31,7 @@ public class SystemController implements ControllerInterface {
 
 	}
 
-	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) {
+	public BookCopy checkIfBookCopyAvailable (String libraryMemberId, String isbn) {
 		BookCopy availableBookCopy = null;
 		boolean outOfStock = true;
 		try {
