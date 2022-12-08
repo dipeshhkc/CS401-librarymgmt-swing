@@ -31,37 +31,28 @@ public class SystemController implements ControllerInterface {
 
 	}
 
-	public BookCopy checkIfBookCopyAvailable (String libraryMemberId, String isbn) {
-		BookCopy availableBookCopy = null;
-		boolean outOfStock = true;
-		try {
-			if (checkIfLoginIdExists(libraryMemberId)) {
-				DataAccess da = new DataAccessFacade();
-				HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopymap = da.readBookCopies();
-				if (bookAndBookCopymap.containsKey(isbn)) {
-					HashMap<Integer, BookCopy> bookCopyMap = bookAndBookCopymap.get(isbn);
-					for (HashMap.Entry<Integer, BookCopy> bookCopyMapSet : bookCopyMap.entrySet()) {
-						BookCopy bcopy = bookCopyMapSet.getValue();
-						if (bcopy.isAvailable()) {
-							availableBookCopy = bcopy;
-							outOfStock = false;
-							break;
-						}
-					}
+	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) throws Exception {
+		if (!checkIfLoginIdExists(libraryMemberId))
+			throw new Exception("You're not a member of our library");
 
-					if (outOfStock) {
-						throw new Exception("Book out of stock!!!");
-					}
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, Book> bookMap = da.readBooksMap();
+		if (!bookMap.containsKey(isbn))
+			throw new Exception("Book does not exist!!!");
 
-				} else {
-					throw new Exception("Requested book with ISBN " + isbn + " is not available");
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return availableBookCopy;
+		Book book = bookMap.get(isbn);
+		if (!book.isAvailable())
+			throw new Exception("Requested book with ISBN " + isbn + " is not available");
+		return book.getNextAvailableCopy();
+	}
+
+	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
+		boolean loginExists;
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> map = da.readMemberMap();
+		loginExists = map.containsKey(libraryMemberId) ? true : false;
+		System.out.println(loginExists);
+		return loginExists;
 	}
 
 	public void addNewBookCopy(String isbn) {
@@ -102,16 +93,6 @@ public class SystemController implements ControllerInterface {
 		if (checkoutBookList.size() > 0) {
 			da.saveCheckoutRecord(libMember.getMemberId(), checkoutBookList);
 		}
-	}
-
-	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
-		boolean loginExists = true;
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, User> map = da.readUserMap();
-		if (!map.containsKey(libraryMemberId)) {
-			throw new LoginException("ID " + libraryMemberId + " not found");
-		}
-		return loginExists;
 	}
 
 	@Override

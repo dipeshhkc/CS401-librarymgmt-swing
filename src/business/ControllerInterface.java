@@ -11,6 +11,6 @@ public interface ControllerInterface {
 
 	public List<String> allBookIds();
 	
-	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn);
+	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) throws Exception;
 
 }

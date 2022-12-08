@@ -17,6 +17,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class CheckoutPanel extends JFrame implements LibWindow {
 	private static final long serialVersionUID = 7598971230240576685L;
@@ -25,6 +26,7 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 	private JTextField txtISBN;
 	
 	private JPanel mainPanel;
+	private JFrame parentFrame;
 	
 	ControllerInterface ci = new SystemController();
 	public static final CheckoutPanel INSTANCE = new CheckoutPanel();
@@ -45,7 +47,7 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 		isInitialized = val;
 	}
 	
-	public JPanel getMainPanel() {
+	public JPanel getMainPanel(JFrame parentFrame) {
 		return mainPanel;
 	}
 	
@@ -53,9 +55,15 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 	public void init() {
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
+		mainPanel.setLayout(new GridLayout(3, 1, 0, 0));
 		
+		//--north-----------------------------------------------------------------
+		JPanel northPanel = new JPanel();
+		mainPanel.add(northPanel);
+		
+		//--middle-----------------------------------------------------------------
 		JPanel middlePanel = new JPanel();
-		mainPanel.add(middlePanel, BorderLayout.CENTER);
+		mainPanel.add(middlePanel);
 		middlePanel.setLayout(new GridLayout(3, 1, 0, 0));
 		
 		//-------------member-------------------
@@ -63,9 +71,11 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 		middlePanel.add(memberPanel);
 		
 		JLabel lblmemLabel = new JLabel("Member Id");
+		lblmemLabel.setFont(new Font("Gulim", Font.PLAIN, 13));
 		memberPanel.add(lblmemLabel);
 		
 		txtMemberId = new JTextField();
+		txtMemberId.setFont(new Font("Gulim", Font.PLAIN, 13));
 		memberPanel.add(txtMemberId);
 		txtMemberId.setColumns(10);
 		
@@ -73,10 +83,12 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 		JPanel ISBNpanel = new JPanel();
 		middlePanel.add(ISBNpanel);
 		
-		JLabel lblISBNLabel = new JLabel("ISBN");
+		JLabel lblISBNLabel = new JLabel("Book ISBN");
+		lblISBNLabel.setFont(new Font("Gulim", Font.PLAIN, 13));
 		ISBNpanel.add(lblISBNLabel);
 		
 		txtISBN = new JTextField();
+		txtISBN.setFont(new Font("Gulim", Font.PLAIN, 13));
 		ISBNpanel.add(txtISBN);
 		txtISBN.setColumns(10);
 		
@@ -85,17 +97,19 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 		
 		//-----------check out Button-----------------
 		JButton btnCheckout = new JButton("Checkout");
+		btnCheckout.setFont(new Font("Gulim", Font.PLAIN, 13));
 		btnCheckout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					BookCopy bc = ci.checkIfBookCopyAvailable(txtMemberId.getText(), txtISBN.getText());
 				}catch  (Exception e1) {
 					
-					JOptionPane.showMessageDialog(this,e1.getMessage());
+					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());
 				}
 			}
 		});
 		checkoutPanel.add(btnCheckout);
+		
 		
 	}
 
