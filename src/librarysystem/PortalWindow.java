@@ -127,7 +127,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		splitPane.setDividerLocation(180);
 		add(splitPane, BorderLayout.CENTER);
 
-		setSize(1100, 800);
+		setSize(1500, 800);
 		setUser(username, au);
 		isInitialized = true;
 
