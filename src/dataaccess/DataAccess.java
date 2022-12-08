@@ -21,6 +21,8 @@ public interface DataAccess {
 
 	public HashMap<String, HashMap<Integer, BookCopy>> readBookCopies();
 
+	public void saveToCheckoutRecord(String memberId, CheckoutRecordEntry cre);
+	
 	public void saveCheckoutRecordEntry(CheckoutRecordEntry cre);
 
 	public void saveCheckoutRecord(String memberId, List<CheckoutRecordEntry> cre);

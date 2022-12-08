@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class DataAccessFacade implements DataAccess {
 		boolean ISBNFound = false;
 		HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = readBookCopies();
 		String isbn = bc.getBook().getIsbn();
-		int bookcopy_uid = bc.getUid();
+		int bookcopy_uid = bc.getCopyNum();
 		for (HashMap.Entry<String, HashMap<Integer, BookCopy>> bookCopyMapSet : bookAndBookCopyMap.entrySet()) {
 			if (bookCopyMapSet.getKey() == isbn) {
 				HashMap<Integer, BookCopy> particularISBNCopySet = bookCopyMapSet.getValue();
@@ -75,6 +76,21 @@ public class DataAccessFacade implements DataAccess {
 		Integer uCheckoutId = cre.getUid();
 		checkoutRecordEntryMap.put(uCheckoutId, cre);
 		saveToStorage(StorageType.CHECKOUTRECORDENTRY, cre);
+	}
+
+	@Override
+	public void saveToCheckoutRecord(String memberId, CheckoutRecordEntry cre) {
+		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = readCheckoutRecord();
+		if (checkoutRecordList.containsKey(memberId)) {
+			List<CheckoutRecordEntry> updateCheckoutList = checkoutRecordList.get(memberId);
+			updateCheckoutList.add(cre);
+			checkoutRecordList.put(memberId, updateCheckoutList);
+		} else {
+			List<CheckoutRecordEntry> newList = new ArrayList<>();
+			newList.add(cre);
+			checkoutRecordList.put(memberId, newList);
+		}
+		saveToStorage(StorageType.CHECKOUTRECORD, checkoutRecordList);
 	}
 
 	@Override

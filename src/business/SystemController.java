@@ -43,16 +43,14 @@ public class SystemController implements ControllerInterface {
 		Book book = bookMap.get(isbn);
 		if (!book.isAvailable())
 			throw new Exception("Requested book with ISBN " + isbn + " is not available");
-		BookCopy bCopy = book.getNextAvailableCopy();
-		
-		addToCheckoutRecordEntry(bCopy,libraryMemberId);
-		return book.getNextAvailableCopy();
+		return addToCheckout(book.getNextAvailableCopy(), libraryMemberId);
 	}
 
-	private void addToCheckoutRecordEntry(BookCopy bCopy, String libraryMemberId) {
+	private BookCopy addToCheckout(BookCopy bCopy, String libraryMemberId) {
 		CheckoutRecordEntry cre = new CheckoutRecordEntry(bCopy, libraryMemberId);
 		DataAccess da = new DataAccessFacade();
-		da.saveCheckoutRecordEntry(cre);
+		da.saveToCheckoutRecord(libraryMemberId, cre);
+		return bCopy;
 	}
 
 	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
@@ -60,7 +58,6 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, LibraryMember> map = da.readMemberMap();
 		loginExists = map.containsKey(libraryMemberId) ? true : false;
-		System.out.println(loginExists);
 		return loginExists;
 	}
 
@@ -69,9 +66,9 @@ public class SystemController implements ControllerInterface {
 		HashMap<String, Book> bookMap = da.readBooksMap();
 		Book b = bookMap.get(isbn);
 		b.addCopy();
-		da.updateBook(b);	
+		da.updateBook(b);
 	}
-	
+
 	public int getBookCopiesCount(String isbn) {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, Book> bookMap = da.readBooksMap();
@@ -90,7 +87,7 @@ public class SystemController implements ControllerInterface {
 		HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = da.readBookCopies();
 		for (BookCopy bc : bookCopyCheckoutList) {
 			String isbn = bc.getBook().getIsbn();
-			int bookCopyUID = bc.getUid();
+			int bookCopyUID = bc.getCopyNum();
 			if (bookAndBookCopyMap.containsKey(isbn)) {
 				HashMap<Integer, BookCopy> bookCopyMap = bookAndBookCopyMap.get(isbn);
 				BookCopy updateBookCopyObj = bookCopyMap.get(bookCopyUID);
