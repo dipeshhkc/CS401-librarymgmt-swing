@@ -4,8 +4,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,8 +18,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.Position.Bias;
 
+import business.Address;
+import business.Author;
+import business.Book;
 import business.ControllerInterface;
+import business.LibraryMember;
+import business.LibrarySystemException;
 import business.SystemController;
 import librarysystem.LibrarySystem;
 
@@ -33,8 +43,12 @@ public class AddNewBookPanel {
 	private static JTextField city;
 	private static JTextField state;
 	private static JTextField zip;
-	private static JTextField maxCheckoutLength;
+	private static JTextArea bio;
+	private static JTextField cell;
+	private static JComboBox<String> maxCheckoutLength;
 	private static ControllerInterface ci = new SystemController();
+	private static List<Author> authors = new ArrayList<>();
+	
 
 	public static Component getNewBookPanel(JFrame frame) {
 		return getPanel(frame);
@@ -78,9 +92,11 @@ public class AddNewBookPanel {
 		bookPanel.add(lblId_1_1);
 		lblId_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
 
-		maxCheckoutLength = new JTextField();
-		maxCheckoutLength.setColumns(10);
+		
+		String[] checkoutLengthOption = { "7","21"};
+	    maxCheckoutLength = new JComboBox<String>(checkoutLengthOption);
 		maxCheckoutLength.setBounds(519, 30, 220, 39);
+		maxCheckoutLength.setSelectedIndex(0);
 		bookPanel.add(maxCheckoutLength);
 
 		JLabel lblId_1_2 = new JLabel("Max Checkout Length");
@@ -99,24 +115,48 @@ public class AddNewBookPanel {
 		authorAdd.setBackground(new Color(75, 0, 130));
 		authorAdd.setBounds(12, 99, 76, 25);
 		bookPanel.add(authorAdd);
+		
+		JLabel authorList = new JLabel("");
+		authorList.setBounds(15, 134, 500, 15);
+		bookPanel.add(authorList);
 
-		JButton btnAdd = new JButton("Add Book");
+		JButton bookAddBtn = new JButton("Add Book");
 
-		btnAdd.addActionListener(e -> {
-
-			JOptionPane.showMessageDialog(frame, "Successful Addition of new Book");
+		bookAddBtn.addActionListener(e -> {
+			String maxCheckoutLengthString =(String)maxCheckoutLength.getSelectedItem();
+			System.out.println("Value "+maxCheckoutLengthString);
+			if (isbn.getText().equals("") || title.getText().equals("") || maxCheckoutLengthString.equals("")) {
+				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
+			} else if (! ((String)maxCheckoutLength.getSelectedItem()).matches("\\d*")) {
+				JOptionPane.showMessageDialog(frame, "Max Checkout Length cannot have letters.");
+			} else if (authors.size()==0) {
+				JOptionPane.showMessageDialog(frame, "Please add atleast one author");
+			} else {
+				
+				Book book = new Book(isbn.getText(), title.getText(), Integer.parseInt(maxCheckoutLengthString),authors);
+				try {
+					ci.addBook(book);
+				} catch (LibrarySystemException err) {
+					JOptionPane.showMessageDialog(frame, err.getMessage());
+					return;
+				}
+				clearBookInputField();
+				authorList.setText("");
+				JOptionPane.showMessageDialog(frame, "Successful Addition of new Book");
+			}
 		});
-		btnAdd.setForeground(Color.WHITE);
-		btnAdd.setBackground(SystemColor.desktop);
-		btnAdd.setBounds(984, 166, 102, 41);
-		panel.add(btnAdd);
+
+		bookAddBtn.setForeground(Color.WHITE);
+		bookAddBtn.setBackground(SystemColor.desktop);
+		bookAddBtn.setBounds(984, 166, 102, 41);
+		panel.add(bookAddBtn);
 
 		JButton btnCancel = new JButton("Clear");
 
 		btnCancel.addActionListener(e -> {
-			LibrarySystem.hideAllWindows();
-			LibrarySystem.INSTANCE.setVisible(true);
+			clearBookInputField();
 		});
+
 		btnCancel.setForeground(Color.WHITE);
 		btnCancel.setBackground(Color.LIGHT_GRAY);
 		btnCancel.setBounds(870, 166, 102, 41);
@@ -124,7 +164,7 @@ public class AddNewBookPanel {
 
 		JPanel authorPanel = new JPanel();
 		authorPanel.setBackground(Color.WHITE);
-		authorPanel.setBounds(50, 231, 1101, 315);
+		authorPanel.setBounds(51, 253, 1101, 315);
 		panel.add(authorPanel);
 		authorPanel.setLayout(null);
 
@@ -133,87 +173,11 @@ public class AddNewBookPanel {
 
 		});
 
-		JScrollPane scrollView = new JScrollPane();
-		scrollView.setBounds(0, 12, 807, 266);
-		authorPanel.add(scrollView);
-		scrollView.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollView.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollView.setLayout(null);
-
-		firstName = new JTextField();
-		firstName.setColumns(10);
-		firstName.setBounds(12, 30, 282, 39);
-		scrollView.add(firstName);
-
-		JLabel lblId_1_3 = new JLabel("FirstName");
-		lblId_1_3.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblId_1_3.setBounds(15, 12, 254, 15);
-		scrollView.add(lblId_1_3);
-
-		lastName = new JTextField();
-		lastName.setColumns(10);
-		lastName.setBounds(306, 30, 282, 39);
-		scrollView.add(lastName);
-
-		JLabel lblId_1_1_2 = new JLabel("LastName");
-		lblId_1_1_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblId_1_1_2.setBounds(309, 12, 143, 15);
-		scrollView.add(lblId_1_1_2);
-
-		JTextArea bio = new JTextArea();
-		bio.setBounds(15, 169, 437, 72);
-		scrollView.add(bio);
-
-		street = new JTextField();
-		street.setColumns(10);
-		street.setBounds(12, 99, 211, 39);
-		scrollView.add(street);
-
-		JLabel lblStreet_2 = new JLabel("Street");
-		lblStreet_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblStreet_2.setBounds(15, 81, 208, 15);
-		scrollView.add(lblStreet_2);
-
-		city = new JTextField();
-		city.setColumns(10);
-		city.setBounds(241, 99, 200, 39);
-		scrollView.add(city);
-
-		JLabel lblId_1_2_2 = new JLabel("City");
-		lblId_1_2_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblId_1_2_2.setBounds(244, 81, 197, 15);
-		scrollView.add(lblId_1_2_2);
-
-		state = new JTextField();
-		state.setColumns(10);
-		state.setBounds(454, 99, 174, 39);
-		scrollView.add(state);
-
-		JLabel lblId_1_1_1_1 = new JLabel("State");
-		lblId_1_1_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblId_1_1_1_1.setBounds(457, 81, 171, 15);
-		scrollView.add(lblId_1_1_1_1);
-
-		zip = new JTextField();
-		zip.setColumns(10);
-		zip.setBounds(646, 99, 135, 39);
-		scrollView.add(zip);
-
-		JLabel lblId_1_2_1_1 = new JLabel("Zip");
-		lblId_1_2_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblId_1_2_1_1.setBounds(649, 81, 254, 15);
-		scrollView.add(lblId_1_2_1_1);
-
-		JLabel lblStreet_1_1 = new JLabel("Bio");
-		lblStreet_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
-		lblStreet_1_1.setBounds(20, 153, 208, 15);
-		scrollView.add(lblStreet_1_1);
-
-		JButton btnCancel_1 = new JButton("Cancel");
-		btnCancel_1.setBounds(829, 226, 102, 41);
-		authorPanel.add(btnCancel_1);
-		btnCancel_1.setForeground(Color.WHITE);
-		btnCancel_1.setBackground(Color.LIGHT_GRAY);
+		JButton btnCancelAuthor = new JButton("Cancel");
+		btnCancelAuthor.setBounds(829, 226, 102, 41);
+		authorPanel.add(btnCancelAuthor);
+		btnCancelAuthor.setForeground(Color.WHITE);
+		btnCancelAuthor.setBackground(Color.LIGHT_GRAY);
 
 		JButton btnAddAuthor = new JButton("Add Author");
 		btnAddAuthor.setBounds(943, 226, 119, 41);
@@ -221,20 +185,145 @@ public class AddNewBookPanel {
 		btnAddAuthor.setForeground(Color.WHITE);
 		btnAddAuthor.setBackground(SystemColor.desktop);
 
+		JPanel addressPanel = new JPanel();
+		addressPanel.setBounds(0, 0, 810, 276);
+		
+		authorPanel.add(addressPanel);
+		addressPanel.setLayout(null);
+
+		firstName = new JTextField();
+		addressPanel.add(firstName);
+		firstName.setColumns(10);
+		firstName.setBounds(23, 30, 211, 39);
+
+		JLabel lblId_1_3 = new JLabel("FirstName");
+		addressPanel.add(lblId_1_3);
+		lblId_1_3.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblId_1_3.setBounds(26, 12, 254, 15);
+
+		lastName = new JTextField();
+		addressPanel.add(lastName);
+		lastName.setColumns(10);
+		lastName.setBounds(255, 30, 282, 39);
+
+		JLabel lblId_1_1_2 = new JLabel("LastName");
+		addressPanel.add(lblId_1_1_2);
+		lblId_1_1_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblId_1_1_2.setBounds(255, 12, 143, 15);
+
+		bio = new JTextArea();
+		addressPanel.add(bio);
+		bio.setBounds(255, 166, 437, 72);
+
+		street = new JTextField();
+		addressPanel.add(street);
+		street.setColumns(10);
+		street.setBounds(23, 99, 211, 39);
+
+		JLabel lblStreet_2 = new JLabel("Street");
+		addressPanel.add(lblStreet_2);
+		lblStreet_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblStreet_2.setBounds(26, 81, 208, 15);
+
+		city = new JTextField();
+		addressPanel.add(city);
+		city.setColumns(10);
+		city.setBounds(255, 99, 200, 39);
+		
+
+		JLabel lblId_1_2_2 = new JLabel("City");
+		addressPanel.add(lblId_1_2_2);
+		lblId_1_2_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblId_1_2_2.setBounds(255, 81, 197, 15);
+
+		state = new JTextField();
+		addressPanel.add(state);
+		state.setColumns(10);
+		state.setBounds(465, 99, 174, 39);
+
+		JLabel lblId_1_1_1_1 = new JLabel("State");
+		addressPanel.add(lblId_1_1_1_1);
+		lblId_1_1_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblId_1_1_1_1.setBounds(468, 81, 171, 15);
+
+		zip = new JTextField();
+		addressPanel.add(zip);
+		zip.setColumns(10);
+		zip.setBounds(657, 99, 135, 39);
+
+		JLabel lblId_1_2_1_1 = new JLabel("Zip");
+		addressPanel.add(lblId_1_2_1_1);
+		lblId_1_2_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblId_1_2_1_1.setBounds(660, 81, 254, 15);
+
+		JLabel lblStreet_1_1 = new JLabel("Bio");
+		addressPanel.add(lblStreet_1_1);
+		lblStreet_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblStreet_1_1.setBounds(255, 150, 208, 15);
+
+		cell = new JTextField();
+		cell.setColumns(10);
+		cell.setBounds(23, 168, 211, 39);
+		addressPanel.add(cell);
+
+		JLabel lblId_1_2_1_1_1 = new JLabel("Cell");
+		lblId_1_2_1_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
+		lblId_1_2_1_1_1.setBounds(26, 150, 254, 15);
+		addressPanel.add(lblId_1_2_1_1_1);
+
+		btnAddAuthor.addActionListener(e -> {
+			String fN = firstName.getText();
+			String lN = lastName.getText();
+			String zipCode = zip.getText();
+			String phone = cell.getText();
+			if (fN.equals("") || lN.equals("") || street.getText().equals("") || city.getText().equals("")
+					|| state.getText().equals("") || zipCode.equals("") || phone.equals("")) {
+				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
+			} else if (!fN.matches("[a-zA-Z]*") || !lN.matches("[a-zA-Z]*")) {
+				JOptionPane.showMessageDialog(frame, "Names cannot have numbers");
+			} else if (!zipCode.matches("\\d{5}")) {
+				JOptionPane.showMessageDialog(frame, "Zip Code should be of 5 digits.");
+			} else if (!phone.matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")) {
+				JOptionPane.showMessageDialog(frame, "Phone Number is invalid");
+			}
+			else {		
+				Address address = new Address(street.getText(), city.getText(), state.getText(), zip.getText());
+				Author author= new Author(fN,lN,phone,address,bio.getText());
+				authors.add(author);
+				List<String> authorListValue = authors.stream().map(a->a.getFirstName()).collect(Collectors.toList());
+				authorList.setText(authorListValue.toString());
+				clearAuthorInputField();
+				authorPanel.setVisible(false);
+			}
+		});
+
+		btnCancelAuthor.addActionListener(e -> {
+			clearAuthorInputField();
+			authorPanel.setVisible(false);
+		});
+
 		authorPanel.setVisible(false);
 
 		return panel;
 
 	}
 
-	private static void clearInputField() {
+	private static void clearBookInputField() {
 		isbn.setText("");
 		title.setText("");
+		maxCheckoutLength.setSelectedIndex(0);;
+		
+	}
+	
+	private static void clearAuthorInputField() {
+		firstName.setText("");
 		lastName.setText("");
-		maxCheckoutLength.setText("");
+		street.setText("");
 		city.setText("");
+		cell.setText("");
 		state.setText("");
 		zip.setText("");
+		bio .setText("");
 	}
 
 }
