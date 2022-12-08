@@ -16,11 +16,11 @@ public class CheckoutRecordEntry implements Serializable {
 	private LocalDate bookReturnedDate;
 	private String memberId;
 
-	public CheckoutRecordEntry(BookCopy bookCopy, LibraryMember libMember) {
+	public CheckoutRecordEntry(BookCopy bookCopy, String libMemberId) {
 		this.bCopy = bookCopy;
 		this.checkoutDate = LocalDate.now();
 		this.dueDate = LocalDate.now().plusDays(bookCopy.getBook().getMaxCheckoutLength());
-		this.memberId= libMember.getMemberId();
+		this.memberId= libMemberId;
 		this.uid = count++;
 	}
 	

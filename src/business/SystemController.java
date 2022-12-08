@@ -44,7 +44,15 @@ public class SystemController implements ControllerInterface {
 		if (!book.isAvailable())
 			throw new Exception("Requested book with ISBN " + isbn + " is not available");
 		BookCopy bCopy = book.getNextAvailableCopy();
+		
+		addToCheckoutRecordEntry(bCopy,libraryMemberId);
 		return book.getNextAvailableCopy();
+	}
+
+	private void addToCheckoutRecordEntry(BookCopy bCopy, String libraryMemberId) {
+		CheckoutRecordEntry cre = new CheckoutRecordEntry(bCopy, libraryMemberId);
+		DataAccess da = new DataAccessFacade();
+		da.saveCheckoutRecordEntry(cre);
 	}
 
 	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
