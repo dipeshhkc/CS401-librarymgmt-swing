@@ -64,16 +64,15 @@ public class SystemController implements ControllerInterface {
 		return availableBookCopy;
 	}
 
-	
 	public void addNewBookCopy(String isbn) {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, Book> bookMap = da.readBooksMap();
 		Book b = bookMap.get(isbn);
 		b.addCopy();
 		da.updateBook(b);
-		
+
 	}
-	
+
 	public List<BookCopy> addBookCopyForCheckout(BookCopy bc, List<BookCopy> bookCopyCheckoutList) {
 		bookCopyCheckoutList.add(bc);
 		return bookCopyCheckoutList;
@@ -98,8 +97,8 @@ public class SystemController implements ControllerInterface {
 			}
 
 		}
-		
-		//bulk update done on CheckoutRecord
+
+		// bulk update done on CheckoutRecord
 		if (checkoutBookList.size() > 0) {
 			da.saveCheckoutRecord(libMember.getMemberId(), checkoutBookList);
 		}
@@ -113,6 +112,12 @@ public class SystemController implements ControllerInterface {
 			throw new LoginException("ID " + libraryMemberId + " not found");
 		}
 		return loginExists;
+	}
+
+	@Override
+	public void addMember(LibraryMember mem) throws LibrarySystemException {
+		DataAccess da = new DataAccessFacade();
+		da.saveNewMember(mem);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import business.Book;
 import business.BookCopy;
 import business.CheckoutRecordEntry;
 import business.LibraryMember;
+import business.LibrarySystemException;
 
 public class DataAccessFacade implements DataAccess {
 
@@ -33,9 +34,13 @@ public class DataAccessFacade implements DataAccess {
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 
 	// implement: other save operations
-	public void saveNewMember(LibraryMember member) {
+	public void saveNewMember(LibraryMember member) throws LibrarySystemException {
 		HashMap<String, LibraryMember> mems = readMemberMap();
 		String memberId = member.getMemberId();
+		// Member with this ID already present.
+		if (mems.containsKey(memberId)) {
+			throw new LibrarySystemException("Member with this ID already Present.");
+		}
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);
 	}
@@ -84,12 +89,12 @@ public class DataAccessFacade implements DataAccess {
 		}
 		saveToStorage(StorageType.CHECKOUTRECORD, checkoutRecordList);
 	}
-	
+
 	@Override
 	public void updateBook(Book b) {
 		HashMap<String, Book> bookListMap = readBooksMap();
 		String isbn = b.getIsbn();
-		if(bookListMap.containsKey(isbn)) {
+		if (bookListMap.containsKey(isbn)) {
 			bookListMap.put(isbn, b);
 		}
 	}
