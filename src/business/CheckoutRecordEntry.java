@@ -7,6 +7,8 @@ public class CheckoutRecordEntry implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static int count = 0;
+	private int uid = 0;
 	private BookCopy bCopy;
 	private LocalDate checkoutDate;
 	private LocalDate dueDate;
@@ -19,8 +21,17 @@ public class CheckoutRecordEntry implements Serializable {
 		this.checkoutDate = LocalDate.now();
 		this.dueDate = LocalDate.now().plusDays(bookCopy.getBook().getMaxCheckoutLength());
 		this.memberId= libMember.getMemberId();
+		this.uid = count++;
 	}
 	
+	public int getUid() {
+		return uid;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+
 	public BookCopy getbCopy() {
 		return bCopy;
 	}

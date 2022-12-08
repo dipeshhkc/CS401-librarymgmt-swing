@@ -9,16 +9,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import business.Book;
 import business.BookCopy;
+import business.CheckoutRecordEntry;
 import business.LibraryMember;
 
 public class DataAccessFacade implements DataAccess {
 
 	enum StorageType {
-		BOOKS, MEMBERS, USERS, BOOKCOPIES;
+		BOOKS, MEMBERS, USERS, BOOKCOPIES, CHECKOUTRECORDENTRY, CHECKOUTRECORD;
 	}
 	// Windows user can use
 
@@ -41,9 +41,70 @@ public class DataAccessFacade implements DataAccess {
 	}
 
 	public void saveBookCopies(BookCopy bc) {
-		Map<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = readBookCopies();
+		boolean ISBNFound = false;
+		HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = readBookCopies();
 		String isbn = bc.getBook().getIsbn();
+		int bookcopy_uid = bc.getUid();
+		for (HashMap.Entry<String, HashMap<Integer, BookCopy>> bookCopyMapSet : bookAndBookCopyMap.entrySet()) {
+			if (bookCopyMapSet.getKey() == isbn) {
+				HashMap<Integer, BookCopy> particularISBNCopySet = bookCopyMapSet.getValue();
+				particularISBNCopySet.put(bookcopy_uid, bc);
+				ISBNFound = true;
+				break;
+			} else {
+				continue;
+			}
+		}
 
+		if (!ISBNFound) {
+			HashMap<Integer, BookCopy> newBookCopyMap = new HashMap<>();
+			bookAndBookCopyMap.put(isbn, newBookCopyMap);
+		}
+		saveToStorage(StorageType.BOOKCOPIES, bookAndBookCopyMap);
+
+	}
+
+	@Override
+	public void saveCheckoutRecordEntry(CheckoutRecordEntry cre) {
+		HashMap<Integer, CheckoutRecordEntry> checkoutRecordEntryMap = readCheckoutRecordEntry();
+		Integer uCheckoutId = cre.getUid();
+		checkoutRecordEntryMap.put(uCheckoutId, cre);
+		saveToStorage(StorageType.CHECKOUTRECORDENTRY, cre);
+	}
+
+	@Override
+	public void saveCheckoutRecord(String memberId, List<CheckoutRecordEntry> creList) {
+		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = readCheckoutRecord();
+		if (checkoutRecordList.containsKey(memberId)) {
+			List<CheckoutRecordEntry> updateCheckoutList = checkoutRecordList.get(memberId);
+			updateCheckoutList.addAll(creList);
+			checkoutRecordList.put(memberId, updateCheckoutList);
+		} else {
+			checkoutRecordList.put(memberId, creList);
+		}
+		saveToStorage(StorageType.CHECKOUTRECORD, checkoutRecordList);
+	}
+	
+	@Override
+	public void updateBook(Book b) {
+		HashMap<String, Book> bookListMap = readBooksMap();
+		String isbn = b.getIsbn();
+		if(bookListMap.containsKey(isbn)) {
+			bookListMap.put(isbn, b);
+		}
+	}
+
+	@Override
+	public void updateBookCopy(int bookCopyUID, BookCopy bc) {
+		HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = readBookCopies();
+		HashMap<Integer, BookCopy> bookCopyMap = null;
+		String isbn = bc.getBook().getIsbn();
+		if (bookAndBookCopyMap.containsKey(isbn)) {
+			bookCopyMap = bookAndBookCopyMap.get(isbn);
+			bookCopyMap.put(bookCopyUID, bc);
+			bookAndBookCopyMap.put(isbn, bookCopyMap);
+		}
+		saveToStorage(StorageType.BOOKCOPIES, bookAndBookCopyMap);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,6 +131,17 @@ public class DataAccessFacade implements DataAccess {
 	@SuppressWarnings("unchecked")
 	public HashMap<String, HashMap<Integer, BookCopy>> readBookCopies() {
 		return (HashMap<String, HashMap<Integer, BookCopy>>) readFromStorage(StorageType.BOOKCOPIES);
+	}
+
+	@SuppressWarnings("unchecked")
+	private HashMap<Integer, CheckoutRecordEntry> readCheckoutRecordEntry() {
+		// TODO Auto-generated method stub
+		return (HashMap<Integer, CheckoutRecordEntry>) readFromStorage(StorageType.CHECKOUTRECORDENTRY);
+	}
+
+	@SuppressWarnings("unchecked")
+	private HashMap<String, List<CheckoutRecordEntry>> readCheckoutRecord() {
+		return (HashMap<String, List<CheckoutRecordEntry>>) readFromStorage(StorageType.CHECKOUTRECORD);
 	}
 
 	///// load methods - these place test data into the storage area
@@ -165,6 +237,12 @@ public class DataAccessFacade implements DataAccess {
 		}
 
 		private static final long serialVersionUID = 5399827794066637059L;
+	}
+
+	@Override
+	public HashMap<Integer, BookCopy> readBookCopy() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

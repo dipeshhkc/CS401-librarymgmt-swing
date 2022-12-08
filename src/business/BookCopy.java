@@ -8,6 +8,8 @@ import java.io.Serializable;
 final public class BookCopy implements Serializable {
 	
 	private static final long serialVersionUID = -63976228084869815L;
+	private static int count = 0;
+	private int uid = 0;
 	private Book book;
 	private int copyNum;
 	private boolean isAvailable;
@@ -15,6 +17,7 @@ final public class BookCopy implements Serializable {
 		this.book = book;
 		this.copyNum = copyNum;
 		this.isAvailable = isAvailable;
+		this.uid = count++;
 	}
 	
 	BookCopy(Book book, int copyNum) {
@@ -31,6 +34,34 @@ final public class BookCopy implements Serializable {
 		return copyNum;
 	}
 	
+	public static int getCount() {
+		return count;
+	}
+
+	public static void setCount(int count) {
+		BookCopy.count = count;
+	}
+
+	public int getUid() {
+		return uid;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public void setCopyNum(int copyNum) {
+		this.copyNum = copyNum;
+	}
+
+	public void setAvailable(boolean isAvailable) {
+		this.isAvailable = isAvailable;
+	}
+
 	public Book getBook() {
 		return book;
 	}
