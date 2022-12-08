@@ -47,7 +47,8 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 		isInitialized = val;
 	}
 	
-	public JPanel getMainPanel(JFrame parentFrame) {
+	public JPanel getMainPanel(JFrame _parentFrame) {
+		parentFrame = _parentFrame;
 		return mainPanel;
 	}
 	
