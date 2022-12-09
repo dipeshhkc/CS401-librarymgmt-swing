@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.FlowLayout;
 
 public class CheckoutPanel extends JFrame implements LibWindow {
 	private static final long serialVersionUID = 7598971230240576685L;
@@ -56,46 +57,36 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 	public void init() {
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
-		mainPanel.setLayout(new GridLayout(3, 1, 0, 0));
+		//mainPanel.setLayout(new GridLayout(3, 1, 0, 0));
+		mainPanel.setLayout(new BorderLayout(0, 0));
 		
 		//--north-----------------------------------------------------------------
 		JPanel northPanel = new JPanel();
-		mainPanel.add(northPanel);
+		FlowLayout flowLayout = (FlowLayout) northPanel.getLayout();
+		flowLayout.setVgap(30);
+		JLabel northLabel = new JLabel("Checkout Book");
+		northLabel.setFont(new Font("Fira Code Retina", Font.BOLD, 20));
+		northPanel.add(northLabel);
+		mainPanel.add(northPanel, BorderLayout.NORTH);
 		
 		//--middle-----------------------------------------------------------------
 		JPanel middlePanel = new JPanel();
-		mainPanel.add(middlePanel);
-		middlePanel.setLayout(new GridLayout(3, 1, 0, 0));
+		mainPanel.add(middlePanel, BorderLayout.CENTER);
+		middlePanel.setLayout(new BorderLayout(0, 0));
 		
+		//-------------list-------------------------------------------
+		JPanel listPanel = new JPanel();
+		middlePanel.add(listPanel, BorderLayout.NORTH);
+		listPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		//-------------member-------------------
-		JPanel memberPanel = new JPanel();
-		middlePanel.add(memberPanel);
+		txtMemberId	= getLblAndTxt(listPanel, "Member Id", true);
+		txtISBN 	=  getLblAndTxt(listPanel, "Book ISBN", true);
 		
-		JLabel lblmemLabel = new JLabel("Member Id");
-		lblmemLabel.setFont(new Font("Gulim", Font.PLAIN, 13));
-		memberPanel.add(lblmemLabel);
-		
-		txtMemberId = new JTextField();
-		txtMemberId.setFont(new Font("Gulim", Font.PLAIN, 13));
-		memberPanel.add(txtMemberId);
-		txtMemberId.setColumns(10);
-		
-		//-------------ISBN-------------------
-		JPanel ISBNpanel = new JPanel();
-		middlePanel.add(ISBNpanel);
-		
-		JLabel lblISBNLabel = new JLabel("Book ISBN");
-		lblISBNLabel.setFont(new Font("Gulim", Font.PLAIN, 13));
-		ISBNpanel.add(lblISBNLabel);
-		
-		txtISBN = new JTextField();
-		txtISBN.setFont(new Font("Gulim", Font.PLAIN, 13));
-		ISBNpanel.add(txtISBN);
-		txtISBN.setColumns(10);
+		JLabel label = new JLabel("");
+		listPanel.add(label);
 		
 		JPanel checkoutPanel = new JPanel();
-		middlePanel.add(checkoutPanel);
-		
+		listPanel.add(checkoutPanel);
 		//-----------check out Button-----------------
 		JButton btnCheckout = new JButton("Checkout");
 		btnCheckout.setFont(new Font("Gulim", Font.PLAIN, 13));
@@ -116,9 +107,36 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 				
 			}
 		});
-		checkoutPanel.add(btnCheckout);
+		checkoutPanel.add(btnCheckout,BorderLayout.CENTER);
 		
+	}
+	
+	private JTextField getLblAndTxt(JPanel parentPanel, String strLbl, boolean bEnable) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 2, 0, 0));
+		parentPanel.add(panel);
 		
+		JPanel lblPanel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
+		flowLayout.setVgap(10);
+		flowLayout.setHgap(30);
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		panel.add(lblPanel);
+		JLabel label = new JLabel(strLbl);
+		lblPanel.add(label);
+		label.setEnabled(bEnable);;
+		
+		JPanel txtPanel = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) txtPanel.getLayout();
+		flowLayout_1.setHgap(5);
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panel.add(txtPanel);
+		JTextField txtField = new JTextField();
+		txtPanel.add(txtField);
+		txtField.setColumns(20);
+		txtField.setEnabled(bEnable);
+		
+		return txtField;
 	}
 
 }

@@ -13,8 +13,10 @@ public interface ControllerInterface {
 	public List<String> allBookIds();
 	
 	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) throws Exception;
-
-	public int getBookCopiesCount(String isbn);
 	
-	public void addNewBookCopy(String isbn) throws Exception;
+	public Book addNewBookCopy(String isbn) throws Exception;
+	
+	public Book getBook(String isbn) throws Exception;
+	
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId);
 }

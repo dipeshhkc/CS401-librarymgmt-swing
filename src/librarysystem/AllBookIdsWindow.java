@@ -2,6 +2,7 @@ package librarysystem;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,10 +57,11 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
 	
 	public void defineTopPanel() {
 		topPanel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) topPanel.getLayout();
+		flowLayout.setVgap(30);
 		JLabel AllIDsLabel = new JLabel("All Book IDs");
-		Util.adjustLabelFont(AllIDsLabel, Util.DARK_BLUE, true);
-		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		topPanel.add(AllIDsLabel);
+		AllIDsLabel.setFont(new Font("Fira Code Retina", Font.BOLD, 20));
+		topPanel.add(AllIDsLabel);	
 	}
 	
 	public void defineMiddlePanel() {
