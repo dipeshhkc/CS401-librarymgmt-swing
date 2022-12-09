@@ -50,12 +50,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	@Override
 	public void init() {
 		formatContentPane();
-		//setPathToImage();
-		//insertSplashImage();
-
-		//createMenus();
-		 pack();
-		//setSize(660, 500);
+		setSize(813, 650);
 		isInitialized = true;
 	}
 
