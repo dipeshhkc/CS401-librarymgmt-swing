@@ -14,20 +14,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.text.Position.Bias;
 
 import business.Address;
 import business.Author;
 import business.Book;
 import business.ControllerInterface;
-import business.LibraryMember;
 import business.LibrarySystemException;
 import business.SystemController;
-import librarysystem.LibrarySystem;
 
 public class AddNewBookPanel {
 
@@ -44,11 +40,11 @@ public class AddNewBookPanel {
 	private static JTextField state;
 	private static JTextField zip;
 	private static JTextArea bio;
+	private static JRadioButton isExpert;
 	private static JTextField cell;
 	private static JComboBox<String> maxCheckoutLength;
 	private static ControllerInterface ci = new SystemController();
 	private static List<Author> authors = new ArrayList<>();
-	
 
 	public static Component getNewBookPanel(JFrame frame) {
 		return getPanel(frame);
@@ -92,9 +88,8 @@ public class AddNewBookPanel {
 		bookPanel.add(lblId_1_1);
 		lblId_1_1.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
 
-		
-		String[] checkoutLengthOption = { "7","21"};
-	    maxCheckoutLength = new JComboBox<String>(checkoutLengthOption);
+		String[] checkoutLengthOption = { "7", "21" };
+		maxCheckoutLength = new JComboBox<String>(checkoutLengthOption);
 		maxCheckoutLength.setBounds(519, 30, 220, 39);
 		maxCheckoutLength.setSelectedIndex(0);
 		bookPanel.add(maxCheckoutLength);
@@ -115,7 +110,7 @@ public class AddNewBookPanel {
 		authorAdd.setBackground(new Color(75, 0, 130));
 		authorAdd.setBounds(12, 99, 76, 25);
 		bookPanel.add(authorAdd);
-		
+
 		JLabel authorList = new JLabel("");
 		authorList.setBounds(15, 134, 500, 15);
 		bookPanel.add(authorList);
@@ -123,17 +118,18 @@ public class AddNewBookPanel {
 		JButton bookAddBtn = new JButton("Add Book");
 
 		bookAddBtn.addActionListener(e -> {
-			String maxCheckoutLengthString =(String)maxCheckoutLength.getSelectedItem();
-			System.out.println("Value "+maxCheckoutLengthString);
+			String maxCheckoutLengthString = (String) maxCheckoutLength.getSelectedItem();
+			System.out.println("Value " + maxCheckoutLengthString);
 			if (isbn.getText().equals("") || title.getText().equals("") || maxCheckoutLengthString.equals("")) {
 				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
-			} else if (! ((String)maxCheckoutLength.getSelectedItem()).matches("\\d*")) {
+			} else if (!((String) maxCheckoutLength.getSelectedItem()).matches("\\d*")) {
 				JOptionPane.showMessageDialog(frame, "Max Checkout Length cannot have letters.");
-			} else if (authors.size()==0) {
+			} else if (authors.size() == 0) {
 				JOptionPane.showMessageDialog(frame, "Please add atleast one author");
 			} else {
-				
-				Book book = new Book(isbn.getText(), title.getText(), Integer.parseInt(maxCheckoutLengthString),authors);
+
+				Book book = new Book(isbn.getText(), title.getText(), Integer.parseInt(maxCheckoutLengthString),
+						authors);
 				try {
 					ci.addBook(book);
 				} catch (LibrarySystemException err) {
@@ -187,7 +183,7 @@ public class AddNewBookPanel {
 
 		JPanel addressPanel = new JPanel();
 		addressPanel.setBounds(0, 0, 810, 276);
-		
+
 		authorPanel.add(addressPanel);
 		addressPanel.setLayout(null);
 
@@ -211,6 +207,11 @@ public class AddNewBookPanel {
 		lblId_1_1_2.setFont(new Font("Fira Code Retina", Font.BOLD, 13));
 		lblId_1_1_2.setBounds(255, 12, 143, 15);
 
+		isExpert = new JRadioButton("isExpert");
+		isExpert.setSelected(true);
+		isExpert.setBounds(586, 30, 206, 39);
+		addressPanel.add(isExpert);
+
 		bio = new JTextArea();
 		addressPanel.add(bio);
 		bio.setBounds(255, 166, 437, 72);
@@ -229,7 +230,6 @@ public class AddNewBookPanel {
 		addressPanel.add(city);
 		city.setColumns(10);
 		city.setBounds(255, 99, 200, 39);
-		
 
 		JLabel lblId_1_2_2 = new JLabel("City");
 		addressPanel.add(lblId_1_2_2);
@@ -285,12 +285,11 @@ public class AddNewBookPanel {
 				JOptionPane.showMessageDialog(frame, "Zip Code should be of 5 digits.");
 			} else if (!phone.matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")) {
 				JOptionPane.showMessageDialog(frame, "Phone Number is invalid");
-			}
-			else {		
+			} else {
 				Address address = new Address(street.getText(), city.getText(), state.getText(), zip.getText());
-				Author author= new Author(fN,lN,phone,address,bio.getText());
+				Author author = new Author(fN, lN, phone, address, bio.getText(), isExpert.isSelected());
 				authors.add(author);
-				List<String> authorListValue = authors.stream().map(a->a.getFirstName()).collect(Collectors.toList());
+				List<String> authorListValue = authors.stream().map(a -> a.getFirstName()).collect(Collectors.toList());
 				authorList.setText(authorListValue.toString());
 				clearAuthorInputField();
 				authorPanel.setVisible(false);
@@ -311,10 +310,11 @@ public class AddNewBookPanel {
 	private static void clearBookInputField() {
 		isbn.setText("");
 		title.setText("");
-		maxCheckoutLength.setSelectedIndex(0);;
-		
+		maxCheckoutLength.setSelectedIndex(0);
+		;
+
 	}
-	
+
 	private static void clearAuthorInputField() {
 		firstName.setText("");
 		lastName.setText("");
@@ -323,7 +323,7 @@ public class AddNewBookPanel {
 		cell.setText("");
 		state.setText("");
 		zip.setText("");
-		bio .setText("");
+		bio.setText("");
 	}
 
 }
