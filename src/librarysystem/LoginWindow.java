@@ -133,8 +133,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 		usernamePanel.add(lblEmail);
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(
-				new ImageIcon("/home/dipesh/Documents/miu/MPP/ProjectSwing_StartupCode/src/librarysystem/user.png"));
+		lblNewLabel_1.setIcon(new ImageIcon(getClass().getResource("/librarysystem/user.png")));
 		lblNewLabel_1.setBounds(12, 0, 48, 45);
 		usernamePanel.add(lblNewLabel_1);
 		lblEmail.setForeground(commonColor);
