@@ -17,7 +17,6 @@ import javax.swing.SwingConstants;
 import business.ControllerInterface;
 import business.LoginException;
 import business.SystemController;
-import librarysystem.designTry.Login;
 
 public class LoginWindow extends JFrame implements LibWindow {
 	private static final long serialVersionUID = -4332346753166095308L;
@@ -97,7 +96,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 		leftFormPanel.add(lblSystem);
 
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(Login.class.getResource("/librarysystem/book.png")));
+		lblNewLabel_2.setIcon(new ImageIcon(getClass().getResource("/librarysystem/book.png")));
 		lblNewLabel_2.setBounds(131, 39, 101, 90);
 		leftFormPanel.add(lblNewLabel_2);
 
@@ -159,7 +158,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 		passwordPanel.add(lblPassword);
 
 		JLabel lblNewLabel_1_1 = new JLabel("");
-		lblNewLabel_1_1.setIcon(new ImageIcon(Login.class.getResource("/librarysystem/padlock.png")));
+		lblNewLabel_1_1.setIcon(new ImageIcon(getClass().getResource("/librarysystem/padlock.png")));
 		lblNewLabel_1_1.setBounds(12, 0, 48, 45);
 		passwordPanel.add(lblNewLabel_1_1);
 
@@ -181,10 +180,10 @@ public class LoginWindow extends JFrame implements LibWindow {
 		imagePanel.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Login.class.getResource("/librarysystem/library-500.png")));
+		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/librarysystem/library-500.png")));
 //		lblNewLabel.setBounds(0, 0, 433, 672);
 		lblNewLabel.setBounds(-26, -24, 433, 672);
-		
+
 		imagePanel.add(lblNewLabel);
 
 	}
