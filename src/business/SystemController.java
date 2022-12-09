@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import business.DTO.BookWithPastDueDateDTO;
+import business.DTO.BookWithPastDueDateDTO.BookWithPastDueDateInternalDTO;
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
@@ -70,37 +72,45 @@ public class SystemController implements ControllerInterface {
 		return checkoutList;
 	}
 
-	public HashMap<String, Object> getOverdueBooks(String isbnNumber) {
-		HashMap<String, Object> responseMap = new HashMap<>();
+	public BookWithPastDueDateDTO getOverdueBooks(String isbnNumber) throws LibrarySystemException {
+		BookWithPastDueDateDTO response = new BookWithPastDueDateDTO();
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = da.readCheckoutRecord();
-		List<Object> overDueList = new ArrayList<Object>();
+		List<BookWithPastDueDateInternalDTO> overDueList = new ArrayList<>();
 		LocalDate currentDate = LocalDate.now();
 		HashMap<String, Book> bookMap = da.readBooksMap();
 		Book book = bookMap.get(isbnNumber);
+		if(book==null) {
+			throw new LibrarySystemException("No such book exist");
+		}
 		String title = book.getTitle();
 		
 		checkoutRecordList.forEach((k, v) -> {
 			v.forEach(e -> {
-				if ((e.getbCopy().getBook().getIsbn().equals(isbnNumber)) && ((e.getDueDate()).isBefore(currentDate))) {
+				if ((e.getbCopy().getBook().getIsbn().equals(isbnNumber)) && ((e.getDueDate()).isAfter(currentDate))) {
 					int copyNumber = e.getbCopy().getCopyNum();
 					String memberId = e.getMemberId();
 					LocalDate dueDate = e.getDueDate();
+					
+					BookWithPastDueDateInternalDTO record =  response.new BookWithPastDueDateInternalDTO();
+					record.setCopyNumber(copyNumber);
+					record.setMemberId(memberId);
+					record.setDueDate(dueDate);
 
-					Object obj = new Object[] { copyNumber, memberId, dueDate };
-					overDueList.add(obj);
+					
+					overDueList.add(record);
 				}
 			});
 		});
 		
-		responseMap.put("isbn", isbnNumber);
-		responseMap.put("title", title);
-		responseMap.put("dueList", overDueList);
-
+		response.setISBN(isbnNumber);
+		response.setOverDueLists(overDueList);
+		response.setTitle(title);
+		
 		// to access
 //		Object[] a = (Object[]) overDueList.get(0);
 //		System.out.println(a[0]);
-		return responseMap;
+		return response;
 	}
 
 	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
