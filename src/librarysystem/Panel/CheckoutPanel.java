@@ -103,10 +103,17 @@ public class CheckoutPanel extends JFrame implements LibWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					BookCopy bc = ci.checkIfBookCopyAvailable(txtMemberId.getText(), txtISBN.getText());
+					JOptionPane.showMessageDialog(parentFrame,bc.getBook().getTitle() + 
+							//" [ISBN: " + bc.getBook().getIsbn() + "]" +
+							" [copy number: " + bc.getCopyNum() + "] is checked out successfully" );
+					
 				}catch  (Exception e1) {
 					
 					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());
+					return;
 				}
+				
+				
 			}
 		});
 		checkoutPanel.add(btnCheckout);
