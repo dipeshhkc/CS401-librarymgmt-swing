@@ -18,6 +18,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -127,12 +129,20 @@ public class SearchMemberPanel extends JFrame{
 		JButton btnSearchButton = new JButton("Search");
 		btnSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if(txtMemberId.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(parentFrame,"Please input Member Id");
+					return;
+				}
+				
 				List<CheckoutRecordEntry> list = null;
 				try {
 					list = ci.getCheckoutRecordByMemberId(txtMemberId.getText());
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					//e1.printStackTrace();
+					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());
+					return;
 				}
 				
 				int iRowCount = model.getRowCount();

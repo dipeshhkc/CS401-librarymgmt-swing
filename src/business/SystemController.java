@@ -67,7 +67,7 @@ public class SystemController implements ControllerInterface {
 	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId) throws Exception {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, LibraryMember> libMemberMap = da.readMemberMap();
-		if(libMemberMap.containsKey(libraryMemberId))
+		if(!libMemberMap.containsKey(libraryMemberId))
 			throw new Exception("Member Id does not exist!!");
 		List<CheckoutRecordEntry> checkoutList = da.getCheckoutRecordByMemberId(libraryMemberId);
 		return checkoutList;
