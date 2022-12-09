@@ -87,7 +87,7 @@ public class SystemController implements ControllerInterface {
 		
 		checkoutRecordList.forEach((k, v) -> {
 			v.forEach(e -> {
-				if ((e.getbCopy().getBook().getIsbn().equals(isbnNumber)) && ((e.getDueDate()).isAfter(currentDate))) {
+				if ((e.getbCopy().getBook().getIsbn().equals(isbnNumber)) && ((e.getDueDate()).isBefore(currentDate))) {
 					int copyNumber = e.getbCopy().getCopyNum();
 					String memberId = e.getMemberId();
 					LocalDate dueDate = e.getDueDate();

@@ -39,7 +39,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	private boolean[] enabledFlags;
 
 	public static String[] funcItems = { "Home", "Member", "   Add new members", "   Search member", "   All memberIds",
-			"Book", "   Add new books", "   Search Expired DueDate Book","   Add new copies", "   Check status of book copy", "   All bookIds",
+			"Book", "   Add new books", "   Search Book With Expired DueDate","   Add new copies", "   Check status of book copy", "   All bookIds",
 			"   Check out" };
 
 	private static int FUNC_HOME = 0;
