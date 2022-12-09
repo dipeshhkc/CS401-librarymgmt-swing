@@ -20,6 +20,7 @@ import librarysystem.Panel.AddNewBookCopyPanel;
 import librarysystem.Panel.AddNewBookPanel;
 import librarysystem.Panel.AddNewMemberPanel;
 import librarysystem.Panel.CheckoutPanel;
+import librarysystem.Panel.SearchMemberPanel;
 
 public class PortalWindow extends JFrame implements LibWindow {
 
@@ -95,6 +96,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		if (au == Auth.LIBRARIAN || au == Auth.BOTH) {
 			enabledFlags[FUNC_BOOK] = true;
 			enabledFlags[FUNC_CHECKOUT] = true;
+			enabledFlags[FUNC_SEARCH_MEM] = true;
 		}
 
 		funcList.setSelectedIndex(FUNC_HOME);
@@ -165,6 +167,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
 
 		cards.add(AddNewBookCopyPanel.INSTANCE.getMainPanel(this), funcItems[FUNC_ADD_NEW_COPY]);
+		cards.add(SearchMemberPanel.INSTANCE.getMainPanel(this), funcItems[FUNC_SEARCH_MEM]);
 		cards.add(CheckoutPanel.INSTANCE.getMainPanel(this), funcItems[FUNC_CHECKOUT]);
 
 		cards.add(AddNewBookPanel.getNewBookPanel(this), funcItems[FUNC_ADD_NEW_BOOK]);

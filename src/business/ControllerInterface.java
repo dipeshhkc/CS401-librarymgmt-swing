@@ -17,4 +17,6 @@ public interface ControllerInterface {
 	public Book addNewBookCopy(String isbn) throws Exception;
 	
 	public Book getBook(String isbn) throws Exception;
+	
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId);
 }
