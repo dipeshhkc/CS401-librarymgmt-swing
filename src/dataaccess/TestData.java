@@ -7,6 +7,8 @@ import java.util.List;
 import business.Address;
 import business.Author;
 import business.Book;
+import business.BookCopy;
+import business.CheckoutRecordEntry;
 import business.LibraryMember;
 
 /**
@@ -61,6 +63,11 @@ public class TestData {
 		DataAccessFacade.loadMemberMap(members);	
 	}
 	
+//	public void checkoutRecordData() {
+//		BookCopy bookCopy = allBooks.get(0).getCopy(1);
+//		CheckoutRecordEntry cre = new CheckoutRecordEntry(bookCopy,)
+//	}
+	
 	///////////// DATA //////////////
 	List<LibraryMember> members = new ArrayList<LibraryMember>();
 	@SuppressWarnings("serial")
@@ -75,6 +82,7 @@ public class TestData {
 			add(new Address("1435 Channing Ave", "Palo Alto", "CA", "94301"));
 			add(new Address("42 Dogwood Dr.", "Fairfield", "IA", "52556"));
 			add(new Address("501 Central", "Mountain View", "CA", "94707"));
+			add(new Address("501 Central", "Buenos Aires", "BA", "94997"));
 		}
 	};
 	@SuppressWarnings("serial")

@@ -127,7 +127,13 @@ public class SearchMemberPanel extends JFrame{
 		JButton btnSearchButton = new JButton("Search");
 		btnSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<CheckoutRecordEntry> list = ci.getCheckoutRecordByMemberId(txtMemberId.getText());
+				List<CheckoutRecordEntry> list = null;
+				try {
+					list = ci.getCheckoutRecordByMemberId(txtMemberId.getText());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 				int iRowCount = model.getRowCount();
 				for(int i = 0; i < iRowCount; i++)
