@@ -70,7 +70,7 @@ public class SystemController implements ControllerInterface {
 		return checkoutList;
 	}
 
-	public List<Object> getOverdueBooks(String isbnNumber) {
+	public HashMap<String, Object> getOverdueBooks(String isbnNumber) {
 		HashMap<String, Object> responseMap = new HashMap<>();
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = da.readCheckoutRecord();
@@ -100,7 +100,7 @@ public class SystemController implements ControllerInterface {
 		// to access
 //		Object[] a = (Object[]) overDueList.get(0);
 //		System.out.println(a[0]);
-		return overDueList;
+		return responseMap;
 	}
 
 	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {
