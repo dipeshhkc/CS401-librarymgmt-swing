@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -83,7 +84,12 @@ public class AddNewBookCopyPanel extends JFrame  implements LibWindow{
 		JButton btnAddCopy = new JButton("Add Copy");
 		btnAddCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ci.addNewBookCopy(txtISBN.getText());
+				try {
+					ci.addNewBookCopy(txtISBN.getText());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());
+					return;
+				}
 				
 				int iNum = ci.getBookCopiesCount(txtISBN.getText());
 				txtCopies.setText("" + iNum);
