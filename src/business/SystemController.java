@@ -71,25 +71,31 @@ public class SystemController implements ControllerInterface {
 	}
 
 	public List<Object> getOverdueBooks(String isbnNumber) {
+		HashMap<String, Object> responseMap = new HashMap<>();
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = da.readCheckoutRecord();
 		List<Object> overDueList = new ArrayList<Object>();
 		LocalDate currentDate = LocalDate.now();
+		HashMap<String, Book> bookMap = da.readBooksMap();
+		Book book = bookMap.get(isbnNumber);
+		String title = book.getTitle();
+		
 		checkoutRecordList.forEach((k, v) -> {
 			v.forEach(e -> {
 				if ((e.getbCopy().getBook().getIsbn().equals(isbnNumber)) && ((e.getDueDate()).isBefore(currentDate))) {
-					Book b = e.getbCopy().getBook();
-					String isbn = b.getIsbn();
-					String title = b.getTitle();
 					int copyNumber = e.getbCopy().getCopyNum();
 					String memberId = e.getMemberId();
 					LocalDate dueDate = e.getDueDate();
 
-					Object obj = new Object[] { isbn, title, copyNumber, memberId, dueDate };
+					Object obj = new Object[] { copyNumber, memberId, dueDate };
 					overDueList.add(obj);
 				}
 			});
 		});
+		
+		responseMap.put("isbn", isbnNumber);
+		responseMap.put("title", title);
+		responseMap.put("dueList", overDueList);
 
 		// to access
 //		Object[] a = (Object[]) overDueList.get(0);
