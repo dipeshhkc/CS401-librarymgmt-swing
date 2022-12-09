@@ -119,7 +119,6 @@ public class AddNewBookPanel {
 
 		bookAddBtn.addActionListener(e -> {
 			String maxCheckoutLengthString = (String) maxCheckoutLength.getSelectedItem();
-			System.out.println("Value " + maxCheckoutLengthString);
 			if (isbn.getText().equals("") || title.getText().equals("") || maxCheckoutLengthString.equals("")) {
 				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
 			} else if (!((String) maxCheckoutLength.getSelectedItem()).matches("\\d*")) {

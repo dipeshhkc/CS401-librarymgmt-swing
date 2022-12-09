@@ -2,8 +2,10 @@ package librarysystem;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListSelectionModel;
@@ -79,7 +81,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	public void setUser(String name, Auth au) {
 		username = name;
 		auth = au;
-		lblWecome.setText("Welcome " + username);
+		lblWecome.setText("Welcome " + username + "(" + au + ")");
 
 		for (int i = 0; i < enabledFlags.length; i++)
 			enabledFlags[i] = false;
@@ -108,21 +110,27 @@ public class PortalWindow extends JFrame implements LibWindow {
 	private void init(String name, Auth au) {
 		username = name;
 		auth = au;
-
+		for (int i =0; i<funcItems.length; i++) {
+			funcItems[i] = "\t\t\t\t\t\t\t\t" + funcItems[i];
+		}
 		enabledFlags = new boolean[funcItems.length];
-
+		
 		// [left] create List of functionalities
 		funcList = new JList<String>(funcItems);
 		funcList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		funcList.setSelectionModel(new DisabledItemSelectionModel());
 		funcList.setCellRenderer(new DisabledItemListCellRenderer());
+		funcList.setFont(new Font("Roboto Slab", Font.PLAIN, 20));	
+		funcList.setForeground(new Color(255, 255, 255));	
+		funcList.setBackground(new Color(44, 62, 80));	
+		funcList.setFixedCellHeight(40);
 
 		// [right] create panels
 		createPanels();
 
 		// [middle] create split
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, funcList, cards);
-		splitPane.setDividerLocation(180);
+		splitPane.setDividerLocation(380);
 		add(splitPane, BorderLayout.CENTER);
 
 		setSize(1500, 800);
@@ -137,6 +145,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
 		lblWecome = new JLabel("Welcome " + username);
+		lblWecome.setFont(new Font("Roboto Slab", Font.BOLD, 10));
 		topPanel.add(lblWecome);
 
 		btnLogout = new JButton("Logout");

@@ -99,7 +99,6 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
 		for (String s : ids) {
 			sb.append(s + "\n");
 		}
-		System.out.println(sb.toString());
 		setData(sb.toString());
 	}
 	public void setData(String data) {

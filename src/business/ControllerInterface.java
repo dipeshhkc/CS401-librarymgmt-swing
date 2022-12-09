@@ -21,7 +21,8 @@ public interface ControllerInterface {
 
 	public Book getBook(String isbn) throws Exception;
 
-	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId);
-
 	public BookWithPastDueDateDTO getOverdueBooks(String isbnNumber) throws LibrarySystemException;
+
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId) throws Exception;
+
 }

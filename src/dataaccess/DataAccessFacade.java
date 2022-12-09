@@ -208,7 +208,6 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, members);
 	}
 
-	// TODO: need to remove this
 	public static void loadCheckout() {
 		HashMap<String, List<CheckoutRecordEntry>> chechoutListMap = new HashMap<>();
 		saveToStorage(StorageType.CHECKOUTRECORD, chechoutListMap);
