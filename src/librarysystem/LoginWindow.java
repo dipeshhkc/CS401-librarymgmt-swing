@@ -180,7 +180,6 @@ public class LoginWindow extends JFrame implements LibWindow {
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/librarysystem/library-500.png")));
-//		lblNewLabel.setBounds(0, 0, 433, 672);
 		lblNewLabel.setBounds(-26, -24, 433, 672);
 
 		imagePanel.add(lblNewLabel);
