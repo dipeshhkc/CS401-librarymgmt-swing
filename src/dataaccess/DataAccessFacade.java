@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class DataAccessFacade implements DataAccess {
 		boolean ISBNFound = false;
 		HashMap<String, HashMap<Integer, BookCopy>> bookAndBookCopyMap = readBookCopies();
 		String isbn = bc.getBook().getIsbn();
-		int bookcopy_uid = bc.getUid();
+		int bookcopy_uid = bc.getCopyNum();
 		for (HashMap.Entry<String, HashMap<Integer, BookCopy>> bookCopyMapSet : bookAndBookCopyMap.entrySet()) {
 			if (bookCopyMapSet.getKey() == isbn) {
 				HashMap<Integer, BookCopy> particularISBNCopySet = bookCopyMapSet.getValue();
@@ -80,12 +81,28 @@ public class DataAccessFacade implements DataAccess {
 
 	}
 
+	// TODO: need to remove this
 	@Override
 	public void saveCheckoutRecordEntry(CheckoutRecordEntry cre) {
 		HashMap<Integer, CheckoutRecordEntry> checkoutRecordEntryMap = readCheckoutRecordEntry();
-		Integer uCheckoutId = cre.getUid();
+		Integer uCheckoutId = 1;
 		checkoutRecordEntryMap.put(uCheckoutId, cre);
 		saveToStorage(StorageType.CHECKOUTRECORDENTRY, cre);
+	}
+
+	@Override
+	public void saveToCheckoutRecord(String memberId, CheckoutRecordEntry cre) {
+		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = readCheckoutRecord();
+		if (checkoutRecordList.containsKey(memberId)) {
+			List<CheckoutRecordEntry> updateCheckoutList = checkoutRecordList.get(memberId);
+			updateCheckoutList.add(cre);
+			checkoutRecordList.put(memberId, updateCheckoutList);
+		} else {
+			List<CheckoutRecordEntry> newList = new ArrayList<>();
+			newList.add(cre);
+			checkoutRecordList.put(memberId, newList);
+		}
+		saveToStorage(StorageType.CHECKOUTRECORD, checkoutRecordList);
 	}
 
 	@Override
@@ -100,6 +117,15 @@ public class DataAccessFacade implements DataAccess {
 		}
 		saveToStorage(StorageType.CHECKOUTRECORD, checkoutRecordList);
 	}
+	
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId) {
+		List<CheckoutRecordEntry> checkoutList = null;
+		HashMap<String, List<CheckoutRecordEntry>> checkoutMap = readCheckoutRecord();
+		if (checkoutMap.containsKey(libraryMemberId)) {
+			checkoutList = checkoutMap.get(libraryMemberId);
+		}
+		return checkoutList;
+	}
 
 	@Override
 	public void updateBook(Book b) {
@@ -108,6 +134,7 @@ public class DataAccessFacade implements DataAccess {
 		if (bookListMap.containsKey(isbn)) {
 			bookListMap.put(isbn, b);
 		}
+		saveToStorage(StorageType.BOOKS, bookListMap);
 	}
 
 	@Override
@@ -156,7 +183,7 @@ public class DataAccessFacade implements DataAccess {
 	}
 
 	@SuppressWarnings("unchecked")
-	private HashMap<String, List<CheckoutRecordEntry>> readCheckoutRecord() {
+	public HashMap<String, List<CheckoutRecordEntry>> readCheckoutRecord() {
 		return (HashMap<String, List<CheckoutRecordEntry>>) readFromStorage(StorageType.CHECKOUTRECORD);
 	}
 
@@ -179,6 +206,12 @@ public class DataAccessFacade implements DataAccess {
 		HashMap<String, LibraryMember> members = new HashMap<String, LibraryMember>();
 		memberList.forEach(member -> members.put(member.getMemberId(), member));
 		saveToStorage(StorageType.MEMBERS, members);
+	}
+
+	// TODO: need to remove this
+	public static void loadCheckout() {
+		HashMap<String, List<CheckoutRecordEntry>> chechoutListMap = new HashMap<>();
+		saveToStorage(StorageType.CHECKOUTRECORD, chechoutListMap);
 	}
 
 	static void saveToStorage(StorageType type, Object ob) {

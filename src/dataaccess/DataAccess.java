@@ -18,9 +18,15 @@ public interface DataAccess {
 	public HashMap<String, User> readUserMap();
 
 	public HashMap<String, LibraryMember> readMemberMap();
-
+	
 	public HashMap<String, HashMap<Integer, BookCopy>> readBookCopies();
 
+	public HashMap<String, List<CheckoutRecordEntry>> readCheckoutRecord();
+	
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId);
+	
+	public void saveToCheckoutRecord(String memberId, CheckoutRecordEntry cre);
+	
 	public void saveCheckoutRecordEntry(CheckoutRecordEntry cre);
 
 	public void saveCheckoutRecord(String memberId, List<CheckoutRecordEntry> cre);

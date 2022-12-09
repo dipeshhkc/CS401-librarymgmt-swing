@@ -16,8 +16,10 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import dataaccess.Auth;
+import librarysystem.Panel.AddNewBookCopyPanel;
 import librarysystem.Panel.AddNewBookPanel;
 import librarysystem.Panel.AddNewMemberPanel;
+import librarysystem.Panel.CheckoutPanel;
 
 public class PortalWindow extends JFrame implements LibWindow {
 
@@ -34,17 +36,8 @@ public class PortalWindow extends JFrame implements LibWindow {
 
 	private boolean[] enabledFlags;
 
-	public static String[] funcItems = { 
-			"Home", 
-			"Member", 
-			"   Add new members", 
-			"   Search member",
-			"   All memberIds",
-			"Book",
-			"   Add new books", 
-			"   Add new copies",
-			"   Check status of book copy",
-			"   All bookIds",
+	public static String[] funcItems = { "Home", "Member", "   Add new members", "   Search member", "   All memberIds",
+			"Book", "   Add new books", "   Add new copies", "   Check status of book copy", "   All bookIds",
 			"   Check out" };
 
 	private static int FUNC_HOME = 0;
@@ -54,7 +47,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	private static int FUNC_ALL_MEM = 4;
 	private static int FUNC_BOOK = 5;
 	private static int FUNC_ADD_NEW_BOOK = 6;
-	private static int FUNC_ADD_NEW_COPY  = 7;
+	private static int FUNC_ADD_NEW_COPY = 7;
 	private static int FUNC_CHECK_STATUS = 8;
 	private static int FUNC_ALL_BOOK = 9;
 	private static int FUNC_CHECKOUT = 10;
@@ -93,9 +86,9 @@ public class PortalWindow extends JFrame implements LibWindow {
 		enabledFlags[FUNC_ALL_MEM] = true;
 		enabledFlags[FUNC_BOOK] = true;
 		enabledFlags[FUNC_ALL_BOOK] = true;
-		if (au == Auth.ADMIN || au == Auth.BOTH) {		
+		if (au == Auth.ADMIN || au == Auth.BOTH) {
 			enabledFlags[FUNC_CREATE_NEW_MEM] = true;
-			
+
 			enabledFlags[FUNC_ADD_NEW_BOOK] = true;
 			enabledFlags[FUNC_ADD_NEW_COPY] = true;
 		}
@@ -151,12 +144,10 @@ public class PortalWindow extends JFrame implements LibWindow {
 		// ------------------------------------
 		// add more functional Panel
 		// -----------------------------------
-		
 
 		JPanel middleP2 = new JPanel();
 		JLabel l2 = new JLabel(funcItems[FUNC_ADD_NEW_BOOK]);
 		middleP2.add(l2);
-
 
 		JPanel middleP3 = new JPanel();
 		JLabel l3 = new JLabel(funcItems[FUNC_ADD_NEW_COPY]);
@@ -172,21 +163,24 @@ public class PortalWindow extends JFrame implements LibWindow {
 		cards = new JPanel(new CardLayout());
 		cards.add(new JPanel(), funcItems[FUNC_HOME]);
 		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
+
+		cards.add(AddNewBookCopyPanel.INSTANCE.getMainPanel(this), funcItems[FUNC_ADD_NEW_COPY]);
+		cards.add(CheckoutPanel.INSTANCE.getMainPanel(this), funcItems[FUNC_CHECKOUT]);
+
 		cards.add(AddNewBookPanel.getNewBookPanel(this), funcItems[FUNC_ADD_NEW_BOOK]);
-		cards.add(middleP3, funcItems[FUNC_ADD_NEW_COPY]);
-		cards.add(middleP4, funcItems[FUNC_CHECKOUT]);
+
 		cards.add(AllMemberIdsWindow.INSTANCE.getMainPanel(), funcItems[FUNC_ALL_MEM]);
 		cards.add(AllBookIdsWindow.INSTANCE.getMainPanel(), funcItems[FUNC_ALL_BOOK]);
 
 		// connect JList elements to CardLayout panels
 		funcList.addListSelectionListener(event -> {
 			String value = funcList.getSelectedValue().toString();
-			
-			if(value.compareTo(funcItems[FUNC_ALL_MEM]) == 0)
+
+			if (value.compareTo(funcItems[FUNC_ALL_MEM]) == 0)
 				AllMemberIdsWindow.INSTANCE.setData();
-			else if(value.compareTo(funcItems[FUNC_ALL_BOOK]) == 0)
+			else if (value.compareTo(funcItems[FUNC_ALL_BOOK]) == 0)
 				AllBookIdsWindow.INSTANCE.setData();
-				
+
 			CardLayout cl = (CardLayout) (cards.getLayout());
 			cl.show(cards, value);
 		});

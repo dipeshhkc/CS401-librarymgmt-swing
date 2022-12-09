@@ -11,5 +11,10 @@ public interface ControllerInterface {
 	public void addBook(Book b) throws LibrarySystemException;
 
 	public List<String> allBookIds();
+	
+	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) throws Exception;
 
+	public int getBookCopiesCount(String isbn);
+	
+	public void addNewBookCopy(String isbn) throws Exception;
 }
