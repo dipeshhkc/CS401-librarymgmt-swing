@@ -177,11 +177,14 @@ public class LoginWindow extends JFrame implements LibWindow {
 		imagePanel = new JPanel();
 		imagePanel.setBackground(Color.WHITE);
 		imagePanel.setBounds(390, 12, 419, 673);
+		imagePanel.setBounds(390, 12, 419, 673);
 		imagePanel.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Login.class.getResource("/librarysystem/library-500.png")));
-		lblNewLabel.setBounds(0, 0, 433, 672);
+//		lblNewLabel.setBounds(0, 0, 433, 672);
+		lblNewLabel.setBounds(-26, -24, 433, 672);
+		
 		imagePanel.add(lblNewLabel);
 
 	}
