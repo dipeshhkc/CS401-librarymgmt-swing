@@ -1,9 +1,9 @@
 package business;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import dataaccess.Auth;
 import dataaccess.DataAccess;
@@ -62,7 +62,39 @@ public class SystemController implements ControllerInterface {
 			throw new Exception("Checkout Error");
 		}
 		return bCopy;
+	}
 
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId) {
+		DataAccess da = new DataAccessFacade();
+		List<CheckoutRecordEntry> checkoutList = da.getCheckoutRecordByMemberId(libraryMemberId);
+		return checkoutList;
+	}
+
+	public List<Object> getOverdueBooks(String isbnNumber) {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, List<CheckoutRecordEntry>> checkoutRecordList = da.readCheckoutRecord();
+		List<Object> overDueList = new ArrayList<Object>();
+		LocalDate currentDate = LocalDate.now();
+		checkoutRecordList.forEach((k, v) -> {
+			v.forEach(e -> {
+				if ((e.getbCopy().getBook().getIsbn().equals(isbnNumber)) && ((e.getDueDate()).isBefore(currentDate))) {
+					Book b = e.getbCopy().getBook();
+					String isbn = b.getIsbn();
+					String title = b.getTitle();
+					int copyNumber = e.getbCopy().getCopyNum();
+					String memberId = e.getMemberId();
+					LocalDate dueDate = e.getDueDate();
+
+					Object obj = new Object[] { isbn, title, copyNumber, memberId, dueDate };
+					overDueList.add(obj);
+				}
+			});
+		});
+
+		// to access
+//		Object[] a = (Object[]) overDueList.get(0);
+//		System.out.println(a[0]);
+		return overDueList;
 	}
 
 	public boolean checkIfLoginIdExists(String libraryMemberId) throws LoginException {

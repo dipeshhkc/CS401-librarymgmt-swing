@@ -70,7 +70,7 @@ public class DataAccessFacade implements DataAccess {
 
 	}
 
-	//TODO: need to remove this
+	// TODO: need to remove this
 	@Override
 	public void saveCheckoutRecordEntry(CheckoutRecordEntry cre) {
 		HashMap<Integer, CheckoutRecordEntry> checkoutRecordEntryMap = readCheckoutRecordEntry();
@@ -105,6 +105,15 @@ public class DataAccessFacade implements DataAccess {
 			checkoutRecordList.put(memberId, creList);
 		}
 		saveToStorage(StorageType.CHECKOUTRECORD, checkoutRecordList);
+	}
+	
+	public List<CheckoutRecordEntry> getCheckoutRecordByMemberId(String libraryMemberId) {
+		List<CheckoutRecordEntry> checkoutList = null;
+		HashMap<String, List<CheckoutRecordEntry>> checkoutMap = readCheckoutRecord();
+		if (checkoutMap.containsKey(libraryMemberId)) {
+			checkoutList = checkoutMap.get(libraryMemberId);
+		}
+		return checkoutList;
 	}
 
 	@Override
@@ -163,7 +172,7 @@ public class DataAccessFacade implements DataAccess {
 	}
 
 	@SuppressWarnings("unchecked")
-	private HashMap<String, List<CheckoutRecordEntry>> readCheckoutRecord() {
+	public HashMap<String, List<CheckoutRecordEntry>> readCheckoutRecord() {
 		return (HashMap<String, List<CheckoutRecordEntry>>) readFromStorage(StorageType.CHECKOUTRECORD);
 	}
 
@@ -187,10 +196,10 @@ public class DataAccessFacade implements DataAccess {
 		memberList.forEach(member -> members.put(member.getMemberId(), member));
 		saveToStorage(StorageType.MEMBERS, members);
 	}
-	
-	//TODO: need to remove this
+
+	// TODO: need to remove this
 	public static void loadCheckout() {
-		HashMap<String, List<CheckoutRecordEntry> > chechoutListMap = new HashMap<>();
+		HashMap<String, List<CheckoutRecordEntry>> chechoutListMap = new HashMap<>();
 		saveToStorage(StorageType.CHECKOUTRECORD, chechoutListMap);
 	}
 
