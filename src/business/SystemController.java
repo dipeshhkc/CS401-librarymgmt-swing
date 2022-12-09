@@ -177,8 +177,8 @@ public class SystemController implements ControllerInterface {
 
 	@Override
 	public void addBook(Book b) throws LibrarySystemException {
-		// TODO Auto-generated method stub
-
+		DataAccess da = new DataAccessFacade();
+		da.addBook(b);
 	}
 
 }
