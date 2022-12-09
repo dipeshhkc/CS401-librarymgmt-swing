@@ -175,4 +175,10 @@ public class SystemController implements ControllerInterface {
 		return retval;
 	}
 
+	@Override
+	public void addBook(Book b) throws LibrarySystemException {
+		// TODO Auto-generated method stub
+
+	}
+
 }

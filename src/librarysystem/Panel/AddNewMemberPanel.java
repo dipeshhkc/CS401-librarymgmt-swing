@@ -174,10 +174,9 @@ public class AddNewMemberPanel {
 		btnAdd.setBounds(756, 378, 102, 41);
 		panel.add(btnAdd);
 
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton("Reset");
 		btnCancel.addActionListener(e -> {
-			LibrarySystem.hideAllWindows();
-			LibrarySystem.INSTANCE.setVisible(true);
+			clearInputField();
 		});
 		btnCancel.setForeground(Color.WHITE);
 		btnCancel.setBackground(Color.LIGHT_GRAY);
