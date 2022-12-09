@@ -9,13 +9,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
+import business.Author;
+import business.Book;
 import business.ControllerInterface;
 import business.SystemController;
 import librarysystem.LibWindow;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 public class AddNewBookCopyPanel extends JFrame  implements LibWindow{
 
@@ -25,6 +32,9 @@ public class AddNewBookCopyPanel extends JFrame  implements LibWindow{
 	private JPanel mainPanel;
 	private JFrame parentFrame;
 	private JTextField txtISBN;
+	private JTextField txtTitle;
+	private JTextField txtAuthor;
+	private JTextField txtCheckoutLeng;
 	private JTextField txtCopies;
 	
 	ControllerInterface ci = new SystemController();
@@ -38,66 +48,113 @@ public class AddNewBookCopyPanel extends JFrame  implements LibWindow{
 		
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
-		mainPanel.setLayout(new GridLayout(3, 1, 0, 0));
+		mainPanel.setLayout(new BorderLayout(0, 0));
+		//mainPanel.setLayout(new GridLayout(3, 1, 0, 0));
 		
 		//--north-----------------------------------------------------------------
 		JPanel northPanel = new JPanel();
-		mainPanel.add(northPanel);
+		FlowLayout flowLayout = (FlowLayout) northPanel.getLayout();
+		flowLayout.setVgap(30);
+		JLabel northLabel = new JLabel("Add New Book Copy");
+		northLabel.setFont(new Font("Fira Code Retina", Font.BOLD, 20));
+		northPanel.add(northLabel);
+		mainPanel.add(northPanel, BorderLayout.NORTH);
 		
+
 		//--middle-----------------------------------------------------------------
 		JPanel middlePanel = new JPanel();
-		mainPanel.add(middlePanel);
-		middlePanel.setLayout(new GridLayout(3, 1, 0, 0));
+		mainPanel.add(middlePanel, BorderLayout.CENTER);
+		middlePanel.setLayout(new BorderLayout(0, 0));	
+
+		//-------------list--------------------------------
+		JPanel listPanel = new JPanel();
+		middlePanel.add(listPanel,BorderLayout.NORTH);
+		listPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		//-------------ISBN-------------------
-		JPanel ISBNpanel = new JPanel();
-		middlePanel.add(ISBNpanel);
+		txtISBN 	= getLblAndTxt(listPanel, "Book ISBN", true);
+		txtTitle 	= getLblAndTxt(listPanel, "Title",false);
+		txtAuthor 	= getLblAndTxt(listPanel, "Authors",false);
+		txtCheckoutLeng = getLblAndTxt(listPanel, "Max Checkout Length",false);
+		txtCopies 	= getLblAndTxt(listPanel, "Current Copies",false);
 		
-		JLabel lblISBNLabel = new JLabel("Book ISBN");
-		lblISBNLabel.setFont(new Font("Gulim", Font.PLAIN, 13));
-		ISBNpanel.add(lblISBNLabel);
+		JLabel label = new JLabel("");
+		listPanel.add(label);
 		
-		txtISBN = new JTextField();
-		txtISBN.setFont(new Font("Gulim", Font.PLAIN, 13));
-		ISBNpanel.add(txtISBN);
-		txtISBN.setColumns(10);
-		
-		//-------------copy number---------------
-		JPanel Copypanel = new JPanel();
-		middlePanel.add(Copypanel);
-		
-		JLabel lblCopyNumLabel = new JLabel("Current Copies");
-		lblCopyNumLabel.setFont(new Font("Gulim", Font.PLAIN, 13));
-		Copypanel.add(lblCopyNumLabel);
-		
-		txtCopies = new JTextField();
-		txtCopies.setEnabled(false);
-		txtCopies.setEditable(false);
-		txtCopies.setFont(new Font("Gulim", Font.PLAIN, 13));
-		Copypanel.add(txtCopies);
-		txtCopies.setColumns(5);
-		
-		//-------------Add-------------------
+		//-------------Search-------------------
 		JPanel AddPanel = new JPanel();
-		middlePanel.add(AddPanel);
+		listPanel.add(AddPanel);
 		
-		JButton btnAddCopy = new JButton("Add Copy");
-		btnAddCopy.addActionListener(new ActionListener() {
+		JButton btnSearch = new JButton("Find Book");
+		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ci.addNewBookCopy(txtISBN.getText());
+					Book b = ci.getBook(txtISBN.getText());
+					updateBook(b);	
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());
 					return;
 				}
-				
-				int iNum = ci.getBookCopiesCount(txtISBN.getText());
-				txtCopies.setText("" + iNum);
+
 			}
 		});
 		
-		btnAddCopy.setFont(new Font("Gulim", Font.PLAIN, 13));
+		AddPanel.add(btnSearch);
+		
+		//-------------Add-------------------
+		JButton btnAddCopy = new JButton("Add Copy");
+		btnAddCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Book b = ci.addNewBookCopy(txtISBN.getText());
+					updateBook(b);	
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());
+					return;
+				}
+			}
+		});
+		
 		AddPanel.add(btnAddCopy);
+		
+	}
+	
+	private void updateBook(Book b) {
+		txtTitle.setText(" " + b.getTitle());
+		txtCheckoutLeng.setText(" " + b.getMaxCheckoutLength());
+		List<String> strAuth = new ArrayList<>();
+		for(Author au: b.getAuthors()) {
+			strAuth.add(au.getFirstName() + " " + au.getLastName());
+		}
+		txtAuthor.setText(" " + strAuth.toString());
+		txtCopies.setText(" " + b.getNumCopies());		
+	}
+	
+	private JTextField getLblAndTxt(JPanel parentPanel, String strLbl, boolean bEnable) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0, 2, 0, 0));
+		parentPanel.add(panel);
+		
+		JPanel lblPanel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) lblPanel.getLayout();
+		flowLayout.setVgap(10);
+		flowLayout.setHgap(30);
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		panel.add(lblPanel);
+		JLabel label = new JLabel(strLbl);
+		lblPanel.add(label);
+		label.setEnabled(bEnable);;
+		
+		JPanel txtPanel = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) txtPanel.getLayout();
+		flowLayout_1.setHgap(5);
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panel.add(txtPanel);
+		JTextField txtField = new JTextField();
+		txtPanel.add(txtField);
+		txtField.setColumns(20);
+		txtField.setEnabled(bEnable);
+		
+		return txtField;
 	}
 	
 	public JPanel getMainPanel(JFrame _parentFrame) {

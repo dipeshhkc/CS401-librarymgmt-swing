@@ -105,7 +105,7 @@ public class SystemController implements ControllerInterface {
 		return loginExists;
 	}
 
-	public void addNewBookCopy(String isbn) throws Exception {
+	public Book addNewBookCopy(String isbn) throws Exception {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, Book> bookMap = da.readBooksMap();
 		if (!bookMap.containsKey(isbn))
@@ -113,15 +113,20 @@ public class SystemController implements ControllerInterface {
 		Book b = bookMap.get(isbn);
 		b.addCopy();
 		da.updateBook(b);
+		
+		return b;
 	}
 
-	public int getBookCopiesCount(String isbn) {
+	public Book getBook(String isbn) throws Exception {
+		
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, Book> bookMap = da.readBooksMap();
+		if (!bookMap.containsKey(isbn))
+			throw new Exception("No book found, couldn't add new copy");
 		Book book = bookMap.get(isbn);
-		return book.getCopies().length;
+		return book;
 	}
-
+	
 	public List<BookCopy> addBookCopyForCheckout(BookCopy bc, List<BookCopy> bookCopyCheckoutList) {
 		bookCopyCheckoutList.add(bc);
 		return bookCopyCheckoutList;
