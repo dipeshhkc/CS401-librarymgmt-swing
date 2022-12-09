@@ -25,6 +25,8 @@ public interface DataAccess {
 
 	public void saveCheckoutRecord(String memberId, List<CheckoutRecordEntry> cre);
 
+	public void addBook(Book b) throws LibrarySystemException;
+	
 	public void updateBookCopy(int bookCopyUID, BookCopy bc);
 
 	public void updateBook(Book b);

@@ -8,6 +8,7 @@ public interface ControllerInterface {
 	public List<String> allMemberIds();
 
 	public void addMember(LibraryMember mem) throws LibrarySystemException;
+	public void addBook(Book b) throws LibrarySystemException;
 
 	public List<String> allBookIds();
 

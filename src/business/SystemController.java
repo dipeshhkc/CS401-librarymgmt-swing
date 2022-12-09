@@ -119,6 +119,12 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		da.saveNewMember(mem);
 	}
+	
+	@Override
+	public void addBook(Book b) throws LibrarySystemException {
+		DataAccess da = new DataAccessFacade();
+		da.addBook(b);
+	}
 
 	@Override
 	public List<String> allMemberIds() {

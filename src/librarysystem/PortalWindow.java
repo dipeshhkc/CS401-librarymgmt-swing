@@ -16,6 +16,7 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import dataaccess.Auth;
+import librarysystem.Panel.AddNewBookPanel;
 import librarysystem.Panel.AddNewMemberPanel;
 
 public class PortalWindow extends JFrame implements LibWindow {
@@ -126,7 +127,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		splitPane.setDividerLocation(180);
 		add(splitPane, BorderLayout.CENTER);
 
-		setSize(1100, 800);
+		setSize(1500, 800);
 		setUser(username, au);
 		isInitialized = true;
 
@@ -151,9 +152,11 @@ public class PortalWindow extends JFrame implements LibWindow {
 		// add more functional Panel
 		// -----------------------------------
 		
+
 		JPanel middleP2 = new JPanel();
 		JLabel l2 = new JLabel(funcItems[FUNC_ADD_NEW_BOOK]);
 		middleP2.add(l2);
+
 
 		JPanel middleP3 = new JPanel();
 		JLabel l3 = new JLabel(funcItems[FUNC_ADD_NEW_COPY]);
@@ -169,7 +172,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		cards = new JPanel(new CardLayout());
 		cards.add(new JPanel(), funcItems[FUNC_HOME]);
 		cards.add(AddNewMemberPanel.getNewMemberPanel(this), funcItems[FUNC_CREATE_NEW_MEM]);
-		cards.add(middleP2, funcItems[FUNC_ADD_NEW_BOOK]);
+		cards.add(AddNewBookPanel.getNewBookPanel(this), funcItems[FUNC_ADD_NEW_BOOK]);
 		cards.add(middleP3, funcItems[FUNC_ADD_NEW_COPY]);
 		cards.add(middleP4, funcItems[FUNC_CHECKOUT]);
 		cards.add(AllMemberIdsWindow.INSTANCE.getMainPanel(), funcItems[FUNC_ALL_MEM]);
