@@ -113,6 +113,9 @@ public class SearchBookPanel {
 							model.addRow(row);
 
 						}
+						JLabel lblBook = new JLabel("Book :"+ books.getTitle());
+						lblBook.setBounds(61, 60, 300, 15);
+						listPanel.add(lblBook);
 
 						listPanel.setVisible(true);
 
