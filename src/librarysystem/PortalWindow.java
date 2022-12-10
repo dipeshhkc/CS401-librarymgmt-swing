@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListSelectionModel;
@@ -41,7 +43,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	private boolean[] enabledFlags;
 
 	public static String[] funcItems = { "Home", "Member", "   Add new members", "   Search member", "   All memberIds",
-			"Book", "   Add new books", "   Search Book With Expired DueDate","   Add new copies", "   Check status of book copy", "   All bookIds",
+			"Book", "   Add new books", "   Search Book With Expired DueDate","   Add new copies", /*"   Check status of book copy",*/ "   All bookIds",
 			"   Check out" };
 
 	private static int FUNC_HOME = 0;
@@ -53,9 +55,9 @@ public class PortalWindow extends JFrame implements LibWindow {
 	private static int FUNC_ADD_NEW_BOOK = 6;
 	private static int FUNC_SEARCH_BOOK = 7;
 	private static int FUNC_ADD_NEW_COPY = 8;
-	private static int FUNC_CHECK_STATUS = 9;
-	private static int FUNC_ALL_BOOK = 10;
-	private static int FUNC_CHECKOUT = 11;
+	//private static int FUNC_CHECK_STATUS = 9;
+	private static int FUNC_ALL_BOOK = 9;
+	private static int FUNC_CHECKOUT = 10;
 
 	public static final PortalWindow INSTANCE = new PortalWindow();
 
@@ -136,6 +138,17 @@ public class PortalWindow extends JFrame implements LibWindow {
 		setSize(1500, 800);
 		setUser(username, au);
 		isInitialized = true;
+		
+		addWindowListener(new WindowAdapter() {
+	         
+	         @Override
+	         public void windowClosing(WindowEvent e) {
+	        	 LibrarySystem.hideAllWindows();
+	        	 LoginWindow.INSTANCE.reset();
+	        	 LibrarySystem.INSTANCE.setVisible(true);
+	         }
+	         
+	     });
 
 	}
 
@@ -145,7 +158,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 		topPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
 		lblWecome = new JLabel("Welcome " + username);
-		lblWecome.setFont(new Font("Roboto Slab", Font.BOLD, 10));
+		lblWecome.setFont(new Font("Roboto Slab", Font.BOLD, 15));
 		topPanel.add(lblWecome);
 
 		btnLogout = new JButton("Logout");
