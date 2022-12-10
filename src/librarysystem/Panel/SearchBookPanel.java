@@ -79,7 +79,7 @@ public class SearchBookPanel {
 
 		DefaultTableModel model = new DefaultTableModel();
 
-		String[] column = { "Copy Number", "Member", "Due Back" };
+		String[] column = { "Copy Number", "Member", "Due Date" };
 
 		model.setColumnIdentifiers(column);
 		table.setModel(model);
@@ -114,7 +114,7 @@ public class SearchBookPanel {
 
 						}
 						JLabel lblBook = new JLabel("Book :"+ books.getTitle());
-						lblBook.setBounds(61, 60, 300, 15);
+						lblBook.setBounds(44, 60, 300, 15);
 						listPanel.add(lblBook);
 
 						listPanel.setVisible(true);
