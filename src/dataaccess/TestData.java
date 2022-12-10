@@ -1,5 +1,6 @@
 package dataaccess;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import business.Book;
 import business.BookCopy;
 import business.CheckoutRecordEntry;
 import business.LibraryMember;
+import business.SystemController;
 
 /**
  * This class loads data into the data repository and also
@@ -31,6 +33,12 @@ public class TestData {
 		td.userData();
 		DataAccess da = new DataAccessFacade();
 		DataAccessFacade.loadCheckout();
+		try {
+			td.checkoutRecordData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	///create books
 	public void bookData() {
@@ -63,10 +71,18 @@ public class TestData {
 		DataAccessFacade.loadMemberMap(members);	
 	}
 	
-//	public void checkoutRecordData() {
-//		BookCopy bookCopy = allBooks.get(0).getCopy(1);
-//		CheckoutRecordEntry cre = new CheckoutRecordEntry(bookCopy,)
-//	}
+	public void checkoutRecordData() throws Exception {
+		BookCopy bookCopy = allBooks.get(0).getCopy(1);
+		if (bookCopy.isAvailable()) {
+			bookCopy.setAvailable(false);
+		}
+		DataAccessFacade da = new DataAccessFacade();
+		da.updateBook(bookCopy.getBook());
+		CheckoutRecordEntry cre = new CheckoutRecordEntry(bookCopy,"1001");
+		cre.setCheckoutDate(LocalDate.of(2021, 03, 26));
+		cre.setDueDate(LocalDate.of(2021, 05, 12));
+		da.saveToCheckoutRecord("1001", cre);
+	}
 	
 	///////////// DATA //////////////
 	List<LibraryMember> members = new ArrayList<LibraryMember>();
