@@ -1,7 +1,18 @@
 package librarysystem.Panel;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -11,18 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import business.CheckoutRecordEntry;
 import business.ControllerInterface;
 import business.SystemController;
-
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.awt.event.ActionEvent;
+import resources.ThemeColor;
 
 public class SearchMemberPanel extends JFrame{
 
@@ -53,9 +53,11 @@ public class SearchMemberPanel extends JFrame{
 		JPanel topPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) topPanel.getLayout();
 		flowLayout.setVgap(30);
-		JLabel AllIDsLabel = new JLabel("Search Member");
-		AllIDsLabel.setFont(new Font("Fira Code Retina", Font.BOLD, 20));
+		JLabel AllIDsLabel = new JLabel("Checkout Record List");
+		AllIDsLabel.setFont(ThemeColor.titleText);
 		topPanel.add(AllIDsLabel);	
+		
+		
 		mainPanel.add(topPanel, BorderLayout.NORTH);
 		
 		//--middle-----------------------------------------------------------------
@@ -115,6 +117,7 @@ public class SearchMemberPanel extends JFrame{
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		panel.add(lblPanel);
 		JLabel label = new JLabel("Member Id");
+		label.setFont(ThemeColor.formLabel);
 		lblPanel.add(label);
 		
 		JPanel txtPanel = new JPanel();
@@ -127,6 +130,12 @@ public class SearchMemberPanel extends JFrame{
 		txtMemberId.setColumns(10);
 		
 		JButton btnSearchButton = new JButton("Search");
+		btnSearchButton.setFont(new Font("Roboto Slab", Font.BOLD, 13));
+		btnSearchButton.setForeground(Color.WHITE);
+		btnSearchButton.setBackground(new Color(0, 0, 139));
+		btnSearchButton.setBounds(345, 40, 90, 36);
+
+		
 		btnSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				

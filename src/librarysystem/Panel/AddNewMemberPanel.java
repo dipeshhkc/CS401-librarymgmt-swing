@@ -17,7 +17,6 @@ import business.ControllerInterface;
 import business.LibraryMember;
 import business.LibrarySystemException;
 import business.SystemController;
-import librarysystem.LibrarySystem;
 
 public class AddNewMemberPanel {
 

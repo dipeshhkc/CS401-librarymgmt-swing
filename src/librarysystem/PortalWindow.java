@@ -2,7 +2,6 @@ package librarysystem;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -26,6 +25,7 @@ import librarysystem.Panel.AddNewMemberPanel;
 import librarysystem.Panel.CheckoutPanel;
 import librarysystem.Panel.SearchBookPanel;
 import librarysystem.Panel.SearchMemberPanel;
+import resources.ThemeColor;
 
 public class PortalWindow extends JFrame implements LibWindow {
 
@@ -42,8 +42,8 @@ public class PortalWindow extends JFrame implements LibWindow {
 
 	private boolean[] enabledFlags;
 
-	public static String[] funcItems = { "Home", "Member", "   Add new members", "   Search member", "   All memberIds",
-			"Book", "   Add new books", "   Search Book With Expired DueDate","   Add new copies", /*"   Check status of book copy",*/ "   All bookIds",
+	public static String[] funcItems = { "Home", "Member", "   Add new members", "   View Checkouts", "   All memberIds",
+			"Book", "   Add new books", "   Search Overdue Books","   Add new copies", /*"   Check status of book copy",*/ "   All bookIds",
 			"   Check out" };
 
 	private static int FUNC_HOME = 0;
@@ -83,7 +83,7 @@ public class PortalWindow extends JFrame implements LibWindow {
 	public void setUser(String name, Auth au) {
 		username = name;
 		auth = au;
-		lblWecome.setText("Welcome " + username + "(" + au + ")");
+		lblWecome.setText("Welcome " + username);
 
 		for (int i = 0; i < enabledFlags.length; i++)
 			enabledFlags[i] = false;
@@ -113,9 +113,10 @@ public class PortalWindow extends JFrame implements LibWindow {
 		username = name;
 		auth = au;
 		for (int i =0; i<funcItems.length; i++) {
-			funcItems[i] = "\t\t\t\t\t\t\t\t" + funcItems[i];
+			funcItems[i] = "      " + funcItems[i];
 		}
 		enabledFlags = new boolean[funcItems.length];
+		
 		
 		// [left] create List of functionalities
 		funcList = new JList<String>(funcItems);
@@ -123,13 +124,12 @@ public class PortalWindow extends JFrame implements LibWindow {
 		funcList.setSelectionModel(new DisabledItemSelectionModel());
 		funcList.setCellRenderer(new DisabledItemListCellRenderer());
 		funcList.setFont(new Font("Roboto Slab", Font.PLAIN, 20));	
-		funcList.setForeground(new Color(255, 255, 255));	
-		funcList.setBackground(new Color(44, 62, 80));	
+		funcList.setForeground(ThemeColor.black);	
+		funcList.setBackground(ThemeColor.backgroundColor);	
 		funcList.setFixedCellHeight(40);
 
 		// [right] create panels
 		createPanels();
-
 		// [middle] create split
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, funcList, cards);
 		splitPane.setDividerLocation(380);
@@ -192,11 +192,14 @@ public class PortalWindow extends JFrame implements LibWindow {
 		// connect JList elements to CardLayout panels
 		funcList.addListSelectionListener(event -> {
 			String value = funcList.getSelectedValue().toString();
-
+			
 			if (value.compareTo(funcItems[FUNC_ALL_MEM]) == 0)
 				AllMemberIdsWindow.INSTANCE.setData();
 			else if (value.compareTo(funcItems[FUNC_ALL_BOOK]) == 0)
 				AllBookIdsWindow.INSTANCE.setData();
+			
+			funcList.setSelectionBackground(ThemeColor.primaryColor);
+			funcList.setSelectionForeground(ThemeColor.white);
 
 			CardLayout cl = (CardLayout) (cards.getLayout());
 			cl.show(cards, value);

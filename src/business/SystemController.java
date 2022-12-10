@@ -109,10 +109,7 @@ public class SystemController implements ControllerInterface {
 		response.setISBN(isbnNumber);
 		response.setOverDueLists(overDueList);
 		response.setTitle(title);
-		
-		// to access
-//		Object[] a = (Object[]) overDueList.get(0);
-//		System.out.println(a[0]);
+
 		return response;
 	}
 

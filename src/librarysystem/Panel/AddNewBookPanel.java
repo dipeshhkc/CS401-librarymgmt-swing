@@ -24,6 +24,7 @@ import business.Book;
 import business.ControllerInterface;
 import business.LibrarySystemException;
 import business.SystemController;
+import resources.ThemeColor;
 
 public class AddNewBookPanel {
 
@@ -52,16 +53,22 @@ public class AddNewBookPanel {
 
 	private static JPanel getPanel(JFrame frame) {
 		panel = new JPanel();
-		panel.setBackground(Color.WHITE);
-		frame.setBackground(Color.WHITE);
+		panel.setBackground(ThemeColor.backgroundColor);
+		frame.setBackground(ThemeColor.backgroundColor);
 		frame.setBounds(100, 100, 1163, 700);
 		panel.setLayout(null);
 
 		JLabel lblAddNewMember = new JLabel("Add New Book");
-		lblAddNewMember.setFont(new Font("Fira Code", Font.BOLD, 18));
+		lblAddNewMember.setFont(ThemeColor.titleText);
 		lblAddNewMember.setForeground(Color.DARK_GRAY);
-		lblAddNewMember.setBounds(51, 0, 170, 30);
+		lblAddNewMember.setBackground(ThemeColor.backgroundColor);
+		lblAddNewMember.setBounds(42, 10, 319, 36);
 		panel.add(lblAddNewMember);
+		
+//		JLabel AllIDsLabel = new JLabel("Overdue Book List");
+//		AllIDsLabel.setFont(ThemeColor.titleText);
+//		AllIDsLabel.setBounds(42, 10, 319, 36);
+		
 
 		JPanel bookPanel = new JPanel();
 		bookPanel.setBounds(51, 46, 807, 161);

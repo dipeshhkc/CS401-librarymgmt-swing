@@ -3,8 +3,6 @@ package business.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
-import business.DTO.BookWithPastDueDateDTO.BookWithPastDueDateInternalDTO;
-
 public class BookWithPastDueDateDTO {
 	
 	private String ISBN;

@@ -8,7 +8,6 @@ import business.BookCopy;
 import business.CheckoutRecordEntry;
 import business.LibraryMember;
 import business.LibrarySystemException;
-import dataaccess.DataAccessFacade.StorageType;
 
 public interface DataAccess {
 	public HashMap<String, Book> readBooksMap();
