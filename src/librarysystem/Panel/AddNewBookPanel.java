@@ -283,7 +283,7 @@ public class AddNewBookPanel {
 			String zipCode = zip.getText();
 			String phone = cell.getText();
 			if (fN.equals("") || lN.equals("") || street.getText().equals("") || city.getText().equals("")
-					|| state.getText().equals("") || zipCode.equals("") || phone.equals("")) {
+					|| state.getText().equals("") || zipCode.equals("") || phone.equals("") || bio.getText().equals("")) {
 				JOptionPane.showMessageDialog(frame, "Please fill all the fields");
 			} else if (!fN.matches("[a-zA-Z]*") || !lN.matches("[a-zA-Z]*")) {
 				JOptionPane.showMessageDialog(frame, "Names cannot have numbers");

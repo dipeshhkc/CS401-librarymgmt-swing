@@ -104,6 +104,7 @@ public class AddNewBookCopyPanel extends JFrame  implements LibWindow{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Book b = ci.addNewBookCopy(txtISBN.getText());
+					JOptionPane.showMessageDialog(parentFrame,"New Copy has been added");
 					updateBook(b);	
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(parentFrame,e1.getMessage());

@@ -3,6 +3,7 @@ package dataaccess;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import business.Address;
@@ -27,11 +28,11 @@ public class TestData {
 	
 	public static void main(String[] args) {
 		TestData td = new TestData();
-		td.bookData();
-		td.libraryMemberData();
-		td.userData();
-		DataAccess da = new DataAccessFacade();
-		DataAccessFacade.loadCheckout();
+//		td.bookData();
+//		td.libraryMemberData();
+//		td.userData();
+//		DataAccess da = new DataAccessFacade();
+//		DataAccessFacade.loadCheckout();
 		try {
 			td.checkoutRecordData();
 		} catch (Exception e) {
@@ -71,16 +72,28 @@ public class TestData {
 	}
 	
 	public void checkoutRecordData() throws Exception {
-		BookCopy bookCopy = allBooks.get(0).getCopy(1);
-		if (bookCopy.isAvailable()) {
-			bookCopy.setAvailable(false);
-		}
 		DataAccessFacade da = new DataAccessFacade();
-		da.updateBook(bookCopy.getBook());
-		CheckoutRecordEntry cre = new CheckoutRecordEntry(bookCopy,"1001");
-		cre.setCheckoutDate(LocalDate.of(2021, 03, 26));
-		cre.setDueDate(LocalDate.of(2021, 05, 12));
-		da.saveToCheckoutRecord("1001", cre);
+//		BookCopy bookCopy = allBooks.get(0).getNextAvailableCopy();
+//		if (bookCopy.isAvailable()) {
+//			bookCopy.setAvailable(false);
+//		}
+//		da.updateBook(bookCopy.getBook());
+//		CheckoutRecordEntry cre = new CheckoutRecordEntry(bookCopy,"1001");
+//		cre.setCheckoutDate(LocalDate.of(2021, 03, 26));
+//		cre.setDueDate(LocalDate.of(2021, 05, 12));
+//		da.saveToCheckoutRecord("1001", cre);
+		
+		
+		
+		
+		HashMap<String, Book> bookMap = da.readBooksMap();
+		Book bookTest = bookMap.get("123");
+		BookCopy bc = bookTest.getCopy(4);
+		CheckoutRecordEntry creTest = new CheckoutRecordEntry(bc,"123");
+		creTest.setCheckoutDate(LocalDate.of(2022, 03, 26));
+		creTest.setDueDate(LocalDate.of(2022, 05, 12));
+		da.saveToCheckoutRecord("123", creTest);
+		
 	}
 	
 	///////////// DATA //////////////
