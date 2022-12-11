@@ -34,7 +34,7 @@ public class SystemController implements ControllerInterface {
 
 	}
 
-	public BookCopy checkIfBookCopyAvailable(String libraryMemberId, String isbn) throws Exception {
+	public BookCopy checkoutBook(String libraryMemberId, String isbn) throws Exception {
 		if (!checkIfLoginIdExists(libraryMemberId))
 			throw new Exception("You're not a member of our library");
 
